@@ -1,0 +1,19 @@
+남양주시장애인복지관 일정·출석·리뷰 웹앱 빠른 시작
+
+1. 이 ZIP 파일을 압축 해제합니다.
+2. GitHub 저장소에 압축 해제한 파일 전체를 업로드합니다.
+3. GitHub 저장소 Settings > Pages에서 main / root로 배포합니다.
+4. 생성된 GitHub Pages 주소로 접속합니다.
+5. 메인 화면에 스프레드시트 Programs 시트 일정이 뜨는지 확인합니다.
+6. 리뷰를 제출한 뒤 스프레드시트 Reviews 시트에 저장되는지 확인합니다.
+
+이미 입력된 Apps Script URL:
+https://script.google.com/macros/s/AKfycbwJjTCX56cZtCrKBgtaMS11PwPeYs4MJQiK8DAKqLoi_sbnI4qtaGXXgdk_TR4L625H/exec
+
+이미 연결된 스프레드시트:
+https://docs.google.com/spreadsheets/d/1Sqj4r2NDXF76_XiFBcAYTcD5rHcu-nTsJSpXqt5_g-U/edit?gid=1707161705#gid=1707161705
+
+주의:
+- Apps Script를 새로 배포하면 config.js의 GOOGLE_SCRIPT_URL을 새 배포 URL로 교체해야 합니다.
+- GitHub Pages 배포 후 수정사항이 바로 안 보이면 브라우저 새로고침 또는 캐시 삭제를 해보세요.
+- 관리자 PIN은 Apps Script 코드의 ADMIN_PIN 값 기준입니다. 기본값은 2026입니다.
