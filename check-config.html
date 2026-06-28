@@ -1,13 +1,25 @@
 <!doctype html>
 <html lang="ko">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>연동 확인</title></head>
-<body style="font-family:sans-serif; padding:24px; line-height:1.6;">
-<h1>연동 확인 페이지</h1>
-<p>아래 URL이 보이면 config.js가 정상 반영된 것입니다.</p>
-<pre id="out" style="white-space:pre-wrap;background:#f4f4f4;padding:16px;border-radius:12px;"></pre>
-<script src="./config.js"></script>
-<script>
-document.getElementById('out').textContent = JSON.stringify(window.APP_CONFIG, null, 2);
-</script>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>연동 확인</title>
+</head>
+<body style="font-family: sans-serif; padding: 24px; line-height: 1.6;">
+  <h1>연동 확인 페이지</h1>
+  <p>아래에 Apps Script URL이 보이면 config.js 연결이 정상입니다.</p>
+
+  <pre id="out" style="white-space: pre-wrap; background: #f4f4f4; padding: 16px; border-radius: 12px;"></pre>
+
+  <script src="./config.js?v=20260628-1"></script>
+  <script>
+    const out = document.getElementById('out');
+
+    if (window.APP_CONFIG) {
+      out.textContent = JSON.stringify(window.APP_CONFIG, null, 2);
+    } else {
+      out.textContent = 'window.APP_CONFIG를 찾지 못했습니다. config.js가 로드되지 않았거나 코드가 잘못되었습니다.';
+    }
+  </script>
 </body>
 </html>
