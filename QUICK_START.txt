@@ -17,3 +17,31 @@ https://docs.google.com/spreadsheets/d/1Sqj4r2NDXF76_XiFBcAYTcD5rHcu-nTsJSpXqt5_
 - Apps Script를 새로 배포하면 config.js의 GOOGLE_SCRIPT_URL을 새 배포 URL로 교체해야 합니다.
 - GitHub Pages 배포 후 수정사항이 바로 안 보이면 브라우저 새로고침 또는 캐시 삭제를 해보세요.
 - 관리자 PIN은 Apps Script 코드의 ADMIN_PIN 값 기준입니다. 기본값은 2026입니다.
+
+
+관리자 화면 접속:
+- 이용인 화면에는 관리 메뉴가 보이지 않습니다.
+- 관리자 접속은 GitHub Pages 주소 뒤에 ?admin=1 을 붙여서 접속합니다.
+- 예: https://아이디.github.io/저장소이름/?admin=1
+- 기본 PIN: 2026
+
+예전 화면이 보이면:
+- GitHub에 새 ZIP의 파일 전체를 덮어쓰기 업로드했는지 확인
+- 브라우저 시크릿창으로 테스트
+- 기존 홈화면 앱 아이콘 삭제 후 새로 홈화면에 추가
+
+PWA 설치 안내 페이지:
+- GitHub Pages 주소 뒤에 /install.html 을 붙이면 설치 안내 페이지로 이동합니다.
+- 예: https://아이디.github.io/저장소이름/install.html
+- 안드로이드는 설치 버튼 또는 홈 화면에 추가를 사용합니다.
+- 아이폰은 Safari 공유 버튼 > 홈 화면에 추가를 사용합니다.
+
+
+최종 연결 URL 반영 완료:
+- Apps Script: https://script.google.com/macros/s/AKfycbzAVaUmkWsWSR_R0GmL_ijyLsie0bw7fIuyR8wuo_cZsDQVxeF7PrwXbXkgaUmt4g0u/exec
+- Spreadsheet: https://docs.google.com/spreadsheets/d/1Sqj4r2NDXF76_XiFBcAYTcD5rHcu-nTsJSpXqt5_g-U/edit?gid=1707161705#gid=1707161705
+
+GitHub 업로드 후 확인할 주소:
+- 이용인용 앱: GitHub Pages 기본 주소
+- 설치 안내: GitHub Pages 주소 + /install.html
+- 관리자 화면: GitHub Pages 주소 + ?admin=1

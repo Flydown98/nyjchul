@@ -10,11 +10,27 @@ const SAMPLE_PROGRAMS = [
 ];
 
 document.addEventListener('DOMContentLoaded', async () => {
-  initDates(); bindNav(); bindEvents(); await loadPrograms(); renderAll(); registerSW();
+  initDates(); bindNav(); bindEvents(); await loadPrograms(); renderAll(); openAdminFromUrl(); registerSW();
 });
 function initDates(){ $('reviewDate').value=today(); selectedDate=today(); }
 function bindNav(){ document.querySelectorAll('.nav').forEach(btn=>btn.addEventListener('click',()=>showPage(btn.dataset.page))); }
-function showPage(page){ document.querySelectorAll('.nav').forEach(b=>b.classList.toggle('active',b.dataset.page===page)); document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===`page-${page}`)); if(page==='calendar') renderCalendar(); if(page==='review') renderReviewPrograms(); }
+function openAdminFromUrl(){
+  const params = new URLSearchParams(window.location.search);
+  const hash = String(window.location.hash || '').replace('#','').toLowerCase();
+  if (params.get('admin') === '1' || hash === 'admin') {
+    showPage('admin');
+  }
+}
+window.addEventListener('hashchange', openAdminFromUrl);
+function showPage(page){
+  document.querySelectorAll('.nav').forEach(b=>b.classList.toggle('active',b.dataset.page===page));
+  document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===`page-${page}`));
+  if(page==='calendar') renderCalendar();
+  if(page==='review') renderReviewPrograms();
+  if(page==='admin') {
+    document.querySelectorAll('.nav').forEach(b=>b.classList.remove('active'));
+  }
+}
 function bindEvents(){
   $('refreshHome').addEventListener('click', async()=>{await loadPrograms(); renderAll();});
   $('prevMonth').addEventListener('click',()=>{currentMonth=new Date(currentMonth.getFullYear(),currentMonth.getMonth()-1,1);renderCalendar();});

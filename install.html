@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>남양주시장애인복지관 앱 설치</title>
+  <meta name="theme-color" content="#1e7f78" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="./assets/icon-192.png" />
+  <link rel="stylesheet" href="./styles.css" />
+  <style>
+    .install-shell{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px 14px 80px}
+    .install-card{width:min(520px,100%);background:#fff;border:1px solid var(--line);border-radius:32px;padding:24px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+    .install-card:before{content:"";position:absolute;right:-70px;top:-80px;width:220px;height:220px;border-radius:999px;background:radial-gradient(circle,rgba(182,213,64,.34),rgba(182,213,64,0));}
+    .install-card:after{content:"";position:absolute;left:-70px;bottom:-90px;width:220px;height:220px;border-radius:999px;background:radial-gradient(circle,rgba(30,127,120,.16),rgba(30,127,120,0));}
+    .install-inner{position:relative;z-index:1}
+    .install-logo{width:100%;max-height:92px;object-fit:contain;object-position:left center;margin-bottom:22px}
+    .install-title{font-size:32px;line-height:1.12;letter-spacing:-.06em;margin:6px 0 10px;color:var(--ink)}
+    .install-desc{color:var(--muted);line-height:1.65;margin:0 0 18px;font-size:15px}
+    .install-actions{display:grid;gap:10px;margin:18px 0}
+    .install-primary{width:100%;min-height:58px;border-radius:20px;font-size:18px;text-decoration:none}
+    .install-help{background:#f5fbf9;border:1px solid var(--line);border-radius:22px;padding:16px;margin-top:16px}
+    .install-help h2{font-size:20px;margin:0 0 10px;letter-spacing:-.04em}
+    .install-help ol{margin:0;padding-left:20px;color:var(--ink);line-height:1.8}
+    .install-help li{margin:4px 0}
+    .install-badge{display:inline-flex;align-items:center;gap:6px;background:var(--lime-soft);color:#5f7f17;padding:7px 12px;border-radius:999px;font-weight:900;font-size:13px}
+    .install-status{margin-top:12px;color:var(--teal);font-weight:900;line-height:1.5}
+    .copy-box{display:flex;gap:8px;margin-top:10px}
+    .copy-box input{font-size:13px}
+    @media(max-width:520px){.install-card{padding:20px;border-radius:28px}.install-title{font-size:29px}}
+  </style>
+</head>
+<body>
+<div class="bg-orb orb-1"></div>
+<div class="bg-orb orb-2"></div>
+<main class="install-shell">
+  <section class="install-card">
+    <div class="install-inner">
+      <img src="./assets/signature_horizontal_color.png" alt="남양주시장애인복지관 20주년" class="install-logo" />
+      <span class="install-badge">PWA 설치 안내</span>
+      <h1 class="install-title">프로그램 일정·리뷰 앱 설치</h1>
+      <p class="install-desc">이 페이지에서 홈 화면에 앱처럼 추가할 수 있습니다. 설치 후에는 휴대폰 바탕화면의 아이콘을 눌러 오늘 일정, 달력, 리뷰 작성 화면을 바로 실행할 수 있습니다.</p>
+      <div class="install-actions">
+        <button id="installButton" class="main-btn install-primary" disabled>앱 설치하기</button>
+        <a href="./index.html" class="ghost-btn install-primary">설치 없이 바로 열기</a>
+      </div>
+      <p id="installStatus" class="install-status">설치 버튼을 준비 중입니다. 버튼이 활성화되지 않으면 아래 안내에 따라 홈 화면에 추가해주세요.</p>
+      <div class="install-help">
+        <h2>안드로이드 / 크롬</h2>
+        <ol>
+          <li>이 페이지를 크롬으로 엽니다.</li>
+          <li><strong>앱 설치하기</strong> 버튼이 활성화되면 누릅니다.</li>
+          <li>버튼이 안 뜨면 오른쪽 위 <strong>⋮ 메뉴</strong>를 누릅니다.</li>
+          <li><strong>홈 화면에 추가</strong> 또는 <strong>앱 설치</strong>를 선택합니다.</li>
+        </ol>
+      </div>
+      <div class="install-help">
+        <h2>아이폰 / 사파리</h2>
+        <ol>
+          <li>이 페이지를 반드시 <strong>Safari</strong>로 엽니다.</li>
+          <li>하단 <strong>공유 버튼</strong>을 누릅니다.</li>
+          <li><strong>홈 화면에 추가</strong>를 누릅니다.</li>
+          <li>이름을 확인하고 <strong>추가</strong>를 누릅니다.</li>
+        </ol>
+      </div>
+      <div class="install-help">
+        <h2>설치 링크 공유</h2>
+        <p class="install-desc" style="margin-bottom:8px;">아래 주소를 문자나 카카오톡으로 보내면 설치 안내 페이지로 바로 접속할 수 있습니다.</p>
+        <div class="copy-box">
+          <input id="installUrl" readonly />
+          <button id="copyUrl" class="ghost-btn">복사</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<script src="./install.js"></script>
+</body>
+</html>

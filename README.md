@@ -74,3 +74,53 @@ const APP_CONFIG = {
 관리자 PIN은 관리자 화면을 숨기는 용도이며, 높은 수준의 보안 기능은 아닙니다.
 
 개인정보가 들어가는 정식 운영 시스템이라면 추후 Supabase, Firebase, 기관 서버 등 별도 인증/DB 시스템을 검토하는 것이 안전합니다.
+
+
+## 관리자 화면 접속 방법
+
+이번 버전은 이용인 화면에서 `자료 관리` 또는 `관리` 메뉴가 보이지 않습니다.
+
+관리자 화면은 아래 방식으로 접속합니다.
+
+- GitHub Pages 주소 뒤에 `?admin=1` 붙이기
+- 또는 주소 뒤에 `#admin` 붙이기
+
+예시:
+`https://아이디.github.io/저장소이름/?admin=1`
+
+관리자 화면에 들어가면 PIN을 입력해야 자료관리 화면이 표시됩니다.
+기본 PIN은 Apps Script 코드의 `ADMIN_PIN` 값이며, 현재 기본값은 `2026`입니다.
+
+## 이전 화면이 계속 보일 때
+
+예전 화면이 계속 보이면 브라우저 캐시 또는 서비스워커 캐시 때문일 수 있습니다.
+
+1. GitHub 저장소에 새 파일이 제대로 올라갔는지 확인
+2. `index.html`, `styles.css`, `app.js`, `config.js`, `sw.js`가 모두 새 파일인지 확인
+3. 휴대폰/PC 브라우저에서 강력 새로고침 또는 시크릿창으로 접속
+4. 기존 홈화면 아이콘을 삭제 후 다시 추가
+
+## PWA 설치 안내 페이지
+
+이번 버전에는 `install.html` 파일이 추가되어 있습니다.
+
+GitHub Pages 배포 후 설치 안내 주소는 아래처럼 됩니다.
+
+`https://아이디.github.io/저장소이름/install.html`
+
+이 주소를 이용인이나 직원에게 문자/카카오톡으로 보내면 됩니다.
+
+- 안드로이드 Chrome/Edge: `앱 설치하기` 버튼이 활성화될 수 있습니다.
+- 아이폰 Safari: 공유 버튼 > 홈 화면에 추가 방식으로 설치합니다.
+- 관리자 화면은 기존처럼 `?admin=1` 주소로 접속합니다.
+
+
+## 최종 연결 정보
+
+Apps Script URL:
+`https://script.google.com/macros/s/AKfycbzAVaUmkWsWSR_R0GmL_ijyLsie0bw7fIuyR8wuo_cZsDQVxeF7PrwXbXkgaUmt4g0u/exec`
+
+Google Spreadsheet URL:
+`https://docs.google.com/spreadsheets/d/1Sqj4r2NDXF76_XiFBcAYTcD5rHcu-nTsJSpXqt5_g-U/edit?gid=1707161705#gid=1707161705`
+
+이 ZIP 파일의 `config.js`에는 위 Apps Script URL이 이미 반영되어 있습니다.
