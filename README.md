@@ -124,3 +124,13 @@ Google Spreadsheet URL:
 `https://docs.google.com/spreadsheets/d/1Sqj4r2NDXF76_XiFBcAYTcD5rHcu-nTsJSpXqt5_g-U/edit?gid=1707161705#gid=1707161705`
 
 이 ZIP 파일의 `config.js`에는 위 Apps Script URL이 이미 반영되어 있습니다.
+
+
+## 개인 일정 기능
+
+이번 버전에는 이용인 개인용 `나의 일정` 탭이 추가되어 있습니다.
+
+- 개인 일정은 Google Sheets로 전송되지 않습니다.
+- 개인 일정은 현재 휴대폰/브라우저의 localStorage에만 저장됩니다.
+- 관리자는 개인 일정을 볼 수 없습니다.
+- 브라우저 데이터 삭제, 기기 변경, 홈화면 앱 삭제 시 개인 일정이 사라질 수 있으므로 백업 다운로드 기능을 함께 제공합니다.

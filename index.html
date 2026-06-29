@@ -48,6 +48,52 @@
       </div>
     </section>
 
+
+    <section id="page-my" class="page">
+      <div class="title-row">
+        <div><p class="kicker">Private</p><h2>나의 일정</h2></div>
+        <div class="month-tools"><button class="circle-btn" id="prevMyMonth">‹</button><button class="circle-btn" id="nextMyMonth">›</button></div>
+      </div>
+      <p class="desc small">이 일정은 내 휴대폰/브라우저에만 저장됩니다. 복지관 관리자와 스프레드시트에는 전송되지 않습니다.</p>
+
+      <div class="month-label" id="myMonthLabel"></div>
+      <div class="calendar-card personal-calendar-card">
+        <div class="week-row"><span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span></div>
+        <div class="calendar-grid" id="myCalendarGrid"></div>
+      </div>
+
+      <div class="selected-date-panel">
+        <div class="title-row compact">
+          <div><p class="kicker">My Day</p><h2 id="mySelectedDateTitle"></h2></div>
+        </div>
+
+        <form id="myEventForm" class="private-form">
+          <input type="hidden" id="myEventId" />
+          <label>날짜</label>
+          <input type="date" id="myEventDate" required />
+          <label>일정 제목</label>
+          <input id="myEventTitle" placeholder="예: 병원 가기, 운동, 약속, 개인 공부" required />
+          <div class="form-two">
+            <div><label>시작</label><input id="myEventStart" type="time" /></div>
+            <div><label>종료</label><input id="myEventEnd" type="time" /></div>
+          </div>
+          <label>메모</label>
+          <textarea id="myEventMemo" rows="3" placeholder="나만 볼 수 있는 메모를 적어주세요."></textarea>
+          <div class="action-row">
+            <button class="main-btn" type="submit">내 일정 저장</button>
+            <button class="soft-btn" type="button" id="resetMyEvent">입력 초기화</button>
+          </div>
+        </form>
+
+        <div class="private-tools">
+          <button class="soft-btn" id="exportMyEvents">내 일정 백업 다운로드</button>
+          <label class="import-label">백업 불러오기<input id="importMyEvents" type="file" accept=".json,application/json" /></label>
+        </div>
+
+        <div id="myEventList" class="my-event-list"></div>
+      </div>
+    </section>
+
     <section id="page-review" class="page">
       <div class="title-row"><div><p class="kicker">Review</p><h2>출석 · 리뷰 남기기</h2></div></div>
       <form id="reviewForm" class="flow-card">
@@ -161,11 +207,12 @@
 <nav class="bottom-nav user-only-nav">
   <button class="nav active" data-page="home"><span>🏠</span><b>오늘</b></button>
   <button class="nav" data-page="calendar"><span>📅</span><b>달력</b></button>
+  <button class="nav" data-page="my"><span>📝</span><b>나의 일정</b></button>
   <button class="nav" data-page="review"><span>✍️</span><b>리뷰</b></button>
 </nav>
 
 <iframe name="hiddenSubmitFrame" id="hiddenSubmitFrame" class="hidden-frame"></iframe>
-<script src="./config.js?v=20260628-1"></script>
-<script src="./app.js?v=20260628-1"></script>
+<script src="./config.js"></script>
+<script src="./app.js"></script>
 </body>
 </html>
