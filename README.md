@@ -168,3 +168,80 @@ https://flydown98.github.io/nyjchul/?v=publicsheet20260629
 - Programs 시트에는 개인정보를 넣지 마세요.
 - 리뷰 저장과 관리자 기능은 Apps Script를 계속 사용합니다.
 - 일정 읽기는 로그인 계정 문제를 피하기 위해 공개 스프레드시트 읽기 방식으로 바꿨습니다.
+
+
+## 정기 일정 관리자 기능
+
+이번 버전에는 관리자 페이지에 `정기 프로그램 일정 생성`과 `정기 일정 관리`가 추가되었습니다.
+
+관리자 URL:
+https://flydown98.github.io/nyjchul/?admin=1&v=recurring20260629
+
+필수:
+1. Apps Script 편집기에서 `google-apps-script.gs` 내용을 전체 교체합니다.
+2. `setup` 함수를 1회 실행합니다.
+3. 새 배포 또는 기존 배포 업데이트를 진행합니다.
+4. config.js의 GOOGLE_SCRIPT_URL이 현재 배포 URL과 맞는지 확인합니다.
+
+정기 일정 기능:
+- 시작일~종료일
+- 반복 요일
+- 시작/종료 시간
+- 프로그램명/장소/담당자/대상/비고 입력
+- 해당 기간 안의 매주 반복 일정을 Programs 시트에 자동 생성
+- RecurringPrograms 시트에 규칙 저장
+- 정기 일정 삭제 시 해당 규칙으로 생성한 Programs 일정은 visible=N으로 숨김 처리
+
+주의:
+- Programs 시트가 공개 읽기 방식이므로 개인정보를 넣지 마세요.
+- 삭제는 물리 삭제가 아니라 숨김 처리입니다. 이력 보존 목적입니다.
+
+
+## 전체 기능 추가 버전
+
+버전: fulladmin20260629
+
+추가/포함 기능:
+- 정기 일정 생성/삭제
+- 개별 일정 휴강/숨김 처리
+- 담당자별 일정 보기
+- 리뷰 CSV 다운로드
+- 프로그램별 리뷰 모아보기
+- 오늘의 안내문/긴급공지
+- 월별 프로그램 수, 리뷰 수 통계
+- 큰 글씨 모드
+- 스프레드시트 백업 안내
+
+필수 작업:
+1. ZIP 압축을 풀어 GitHub 저장소에 전체 덮어쓰기
+2. Apps Script 편집기에서 `google-apps-script.gs` 내용을 전체 교체
+3. Apps Script에서 `setup` 함수 1회 실행
+4. 새 배포 또는 배포 업데이트
+5. config.js의 GOOGLE_SCRIPT_URL이 현재 배포 URL과 맞는지 확인
+6. 스프레드시트에서 Programs, Notices 시트를 웹에 게시
+   - 파일 > 공유 > 웹에 게시
+   - Programs 시트 게시
+   - Notices 시트도 게시 또는 전체 문서 게시
+
+접속:
+- 이용인/직원: https://flydown98.github.io/nyjchul/?v=fulladmin20260629
+- 설치 안내: https://flydown98.github.io/nyjchul/install.html?v=fulladmin20260629
+- 총관리자: https://flydown98.github.io/nyjchul/?admin=1&v=fulladmin20260629
+
+주의:
+- Programs, Notices 시트는 공개 읽기 방식이므로 개인정보를 넣지 마세요.
+- Reviews 시트는 Apps Script를 통해 관리자만 확인하는 구조입니다.
+- 삭제 기능은 물리 삭제가 아니라 visible=N 숨김 처리입니다.
+
+
+## 공개용 디자인 개선 버전
+
+버전: friendly20260629
+
+변경 사항:
+- 이용인이 보기 쉬운 공개용 화면 디자인으로 조정
+- 첫 화면 문구를 친근한 표현으로 변경
+- 화면에서 `스프레드시트`, `출석부` 같은 기술적인 표현 최소화
+- 참여 기록 화면을 더 부드러운 문구로 변경
+- 큰 글씨 모드 버튼 문구 개선
+- 운영자 기능은 그대로 유지

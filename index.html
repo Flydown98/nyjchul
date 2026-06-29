@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>남양주시장애인복지관 · 일정 출석 리뷰</title>
+  <title>남양주시장애인복지관 · 함께하는 오늘</title>
   <meta name="theme-color" content="#1e7f78" />
-  <meta name="description" content="구글 스프레드시트와 연동되는 복지관 프로그램 일정, 출석, 리뷰 웹앱" />
+  <meta name="description" content="남양주시장애인복지관 프로그램 일정 확인과 참여 기록을 위한 웹앱" />
   <link rel="manifest" href="./manifest.webmanifest" />
   <link rel="apple-touch-icon" href="./assets/icon-192.png" />
-  <link rel="stylesheet" href="./styles.css?v=publicsheet20260629" />
+  <link rel="stylesheet" href="./styles.css?v=friendly20260629" />
 </head>
 <body>
 <div class="bg-orb orb-1"></div>
@@ -16,18 +16,33 @@
 <div class="shell">
   <header class="hero">
     <img src="./assets/signature_horizontal_color.png" alt="남양주시장애인복지관 20주년" class="brand-logo" />
-    <p class="eyebrow">스프레드시트 연동형 웹앱</p>
-    <h1>오늘의 일정과 리뷰</h1>
-    <p class="desc">달력에서 프로그램을 확인하고, 출석과 선택형 리뷰를 스프레드시트에 저장합니다.</p>
-    <div class="hero-status" id="syncStatus">연동 상태 확인 중...</div>
+    <p class="eyebrow">남양주시장애인복지관</p>
+    <h1>함께하는 오늘</h1>
+    <p class="desc">오늘 진행되는 프로그램을 확인하고, 참여한 뒤 간단한 소감과 기록을 남길 수 있어요.</p>
+    <div class="hero-status" id="syncStatus">오늘 일정을 준비하고 있어요.</div>
+    <div class="access-row">
+      <button class="soft-btn" id="bigTextToggle" type="button">글씨 크게 보기</button>
+    </div>
   </header>
 
   <main>
     <section id="page-home" class="page active">
       <div class="title-row">
-        <div><p class="kicker">Today</p><h2>오늘의 일정</h2></div>
-        <button class="soft-btn" id="refreshHome">새로고침</button>
+        <div><p class="kicker">Today</p><h2>오늘 만나는 프로그램</h2></div>
+        <button class="soft-btn" id="refreshHome">다시 보기</button>
       </div>
+
+      <div class="notice-area" id="noticeArea"></div>
+
+      <div class="filter-card">
+        <label for="managerFilter">담당자별 보기</label>
+        <div class="inline-control">
+          <select id="managerFilter"><option value="">전체 담당자</option></select>
+          <button class="soft-btn" id="clearManagerFilter" type="button">모두 보기</button>
+        </div>
+        <p class="desc small">원하는 담당자를 선택하면 관련 프로그램만 모아볼 수 있습니다.</p>
+      </div>
+
       <div class="today-summary" id="todaySummary"></div>
       <div class="program-list" id="todayPrograms"></div>
     </section>
@@ -54,7 +69,7 @@
         <div><p class="kicker">Private</p><h2>나의 일정</h2></div>
         <div class="month-tools"><button class="circle-btn" id="prevMyMonth">‹</button><button class="circle-btn" id="nextMyMonth">›</button></div>
       </div>
-      <p class="desc small">이 일정은 내 휴대폰/브라우저에만 저장됩니다. 복지관 관리자와 스프레드시트에는 전송되지 않습니다.</p>
+      <p class="desc small">이 일정은 내 기기에만 저장됩니다. 복지관 관리자에게는 보이지 않아요.</p>
 
       <div class="month-label" id="myMonthLabel"></div>
       <div class="calendar-card personal-calendar-card">
@@ -95,7 +110,7 @@
     </section>
 
     <section id="page-review" class="page">
-      <div class="title-row"><div><p class="kicker">Review</p><h2>출석 · 리뷰 남기기</h2></div></div>
+      <div class="title-row"><div><p class="kicker">Record</p><h2>참여 기록 남기기</h2></div></div>
       <form id="reviewForm" class="flow-card">
         <div class="step"><span>1</span><strong>날짜와 프로그램 선택</strong></div>
         <label>날짜</label>
@@ -109,10 +124,10 @@
         <label>확인용 번호 또는 생년월일 <em>선택</em></label>
         <input type="text" id="personCode" name="personCode" placeholder="예: 0101 또는 생년월일 일부" />
 
-        <div class="step"><span>3</span><strong>출석 상태</strong></div>
+        <div class="step"><span>3</span><strong>참여 여부</strong></div>
         <div class="choice-grid two" id="statusChoices">
-          <button type="button" class="choice active" data-name="status" data-value="출석">✅<b>출석</b></button>
-          <button type="button" class="choice" data-name="status" data-value="결석">❌<b>결석</b></button>
+          <button type="button" class="choice active" data-name="status" data-value="출석">✅<b>참여했어요</b></button>
+          <button type="button" class="choice" data-name="status" data-value="결석">❌<b>참여하지 못했어요</b></button>
           <button type="button" class="choice" data-name="status" data-value="지각">⏰<b>지각</b></button>
           <button type="button" class="choice" data-name="status" data-value="조퇴">↩️<b>조퇴</b></button>
         </div>
@@ -141,7 +156,7 @@
 
         <label>하고 싶은 말 <em>선택</em></label>
         <textarea id="memo" name="memo" rows="4" placeholder="짧게 적어도 괜찮아요"></textarea>
-        <button type="submit" class="main-btn">스프레드시트에 저장하기</button>
+        <button type="submit" class="main-btn">기록 남기기</button>
         <p class="notice" id="submitNotice"></p>
       </form>
     </section>
@@ -150,19 +165,67 @@
       <div id="adminLogin" class="login-card">
         <img src="./assets/symbol_color.png" alt="" />
         <p class="kicker">Admin</p>
-        <h2>관리자 페이지</h2>
-        <p class="desc small">자료관리, 프로그램 추가, 리뷰 확인은 관리자 PIN 입력 후 표시됩니다. 단, GitHub 정적 웹앱의 PIN은 강력한 보안장치가 아니라 화면 숨김용입니다.</p>
+        <h2>운영자 전용 메뉴</h2>
+        <p class="desc small">프로그램 운영과 안내 작성은 운영자 번호 입력 후 사용할 수 있습니다.</p>
         <input type="password" id="adminPin" placeholder="관리자 PIN" />
-        <button class="main-btn" id="adminLoginBtn">관리자로 들어가기</button>
+        <button class="main-btn" id="adminLoginBtn">운영 메뉴 열기</button>
       </div>
 
       <div id="adminPanel" class="admin-panel hidden">
-        <div class="title-row"><div><p class="kicker">Admin</p><h2>자료 관리</h2></div><button id="adminLogout" class="soft-btn">나가기</button></div>
+        <div class="title-row"><div><p class="kicker">Admin</p><h2>운영 관리</h2></div><button id="adminLogout" class="soft-btn">나가기</button></div>
         <div class="admin-card">
           <h3>스프레드시트 연동</h3>
           <p id="adminSyncText" class="desc small"></p>
           <button id="adminReload" class="soft-btn">스프레드시트 다시 불러오기</button>
         </div>
+
+        <div class="admin-card">
+          <div class="title-row compact">
+            <div><h3>관리자 통계</h3></div>
+            <button id="refreshStats" class="soft-btn" type="button">통계 새로고침</button>
+          </div>
+          <div class="stat-grid" id="adminStats"></div>
+          <p class="desc small">리뷰 통계는 리뷰 불러오기 후 반영됩니다.</p>
+        </div>
+
+        <div class="admin-card">
+          <div class="title-row compact"><div><h3>일정 휴강/숨김 처리</h3></div><button id="refreshProgramManage" class="soft-btn" type="button">일정 새로고침</button></div>
+          <p class="desc small">일정을 실제 삭제하지 않고 visible=N으로 숨김 처리합니다. 이력 보존용입니다.</p>
+          <div class="time-grid">
+            <div><label>날짜</label><input type="date" id="programManageDate" /></div>
+            <div><label>담당자</label><select id="programManageManager"><option value="">전체 담당자</option></select></div>
+          </div>
+          <label>프로그램명 검색</label>
+          <input type="text" id="programManageKeyword" placeholder="예: 음악, 미술, 체육" />
+          <div id="programManageList" class="review-list"></div>
+        </div>
+
+        <form id="noticeForm" class="admin-card">
+          <h3>오늘의 안내문/긴급공지 등록</h3>
+          <p class="desc small">이용인/직원 앱 첫 화면에 표시됩니다. 기간이 지난 공지는 자동으로 보이지 않습니다.</p>
+          <input type="hidden" name="action" value="addNotice" />
+          <div class="time-grid">
+            <div><label>게시 시작일</label><input type="date" name="startDate" required /></div>
+            <div><label>게시 종료일</label><input type="date" name="endDate" required /></div>
+          </div>
+          <label>구분</label>
+          <select name="type">
+            <option value="안내">안내</option>
+            <option value="긴급">긴급</option>
+            <option value="휴강">휴강</option>
+            <option value="장소변경">장소변경</option>
+          </select>
+          <label>제목</label><input type="text" name="title" required placeholder="예: 금일 2층 프로그램실 이용 안내" />
+          <label>내용</label><textarea name="content" rows="3" required></textarea>
+          <button class="main-btn" type="submit">공지 등록</button>
+          <p class="notice" id="noticeNotice"></p>
+        </form>
+
+        <div class="admin-card">
+          <div class="title-row compact"><div><h3>공지 관리</h3></div><button id="loadNoticesAdmin" class="soft-btn" type="button">공지 불러오기</button></div>
+          <div id="noticeManageList" class="review-list"></div>
+        </div>
+
 
         <form id="programForm" class="admin-card">
           <h3>프로그램 일정 추가</h3>
@@ -178,10 +241,74 @@
           <p class="notice" id="programNotice"></p>
         </form>
 
+
+        <form id="recurringForm" class="admin-card">
+          <h3>정기 프로그램 일정 생성</h3>
+          <p class="desc small">매주 같은 요일·시간에 반복되는 프로그램을 기간 단위로 한꺼번에 생성합니다. 생성된 일정은 Programs 시트에 들어가며, 규칙 삭제 시 해당 규칙으로 만든 일정도 함께 숨김 처리할 수 있습니다.</p>
+          <input type="hidden" name="action" value="addRecurringRule" />
+
+          <div class="time-grid">
+            <div><label>시작일</label><input type="date" name="startDate" required /></div>
+            <div><label>종료일</label><input type="date" name="endDate" required /></div>
+          </div>
+
+          <label>반복 요일</label>
+          <select name="weekday" required>
+            <option value="">요일 선택</option>
+            <option value="월">월요일</option>
+            <option value="화">화요일</option>
+            <option value="수">수요일</option>
+            <option value="목">목요일</option>
+            <option value="금">금요일</option>
+            <option value="토">토요일</option>
+            <option value="일">일요일</option>
+          </select>
+
+          <div class="time-grid">
+            <div><label>시작</label><input type="time" name="start" required /></div>
+            <div><label>종료</label><input type="time" name="end" required /></div>
+          </div>
+
+          <label>프로그램명</label><input type="text" name="title" required placeholder="예: 음악활동" />
+          <label>장소</label><input type="text" name="place" placeholder="예: 프로그램실1" />
+          <label>담당자</label><input type="text" name="manager" />
+          <label>대상</label><input type="text" name="target" placeholder="예: 성인, 청소년" />
+          <label>비고</label><textarea name="memo" rows="3" placeholder="예: 매주 월요일 진행"></textarea>
+
+          <button class="main-btn" type="submit">정기 일정 한꺼번에 생성</button>
+          <p class="notice" id="recurringNotice"></p>
+        </form>
+
+        <div class="admin-card">
+          <div class="title-row compact"><div><h3>정기 일정 관리</h3></div><button id="loadRecurringRules" class="soft-btn">목록 불러오기</button></div>
+          <p class="desc small">정기 일정 규칙을 삭제하면 해당 규칙으로 생성된 Programs 일정은 삭제 대신 visible=N으로 숨김 처리됩니다.</p>
+          <div id="recurringRuleList" class="review-list"></div>
+        </div>
+
         <div class="admin-card">
           <div class="title-row compact"><div><h3>제출된 리뷰</h3></div><button id="loadReviews" class="soft-btn">리뷰 불러오기</button></div>
+          <div class="time-grid">
+            <div><label>프로그램별 리뷰 보기</label><select id="reviewProgramFilter"><option value="">전체 프로그램</option></select></div>
+            <div><label>리뷰 검색</label><input type="text" id="reviewKeyword" placeholder="이름, 메모, 프로그램 검색" /></div>
+          </div>
+          <div id="programReviewSummary" class="desc small"></div>
           <div id="reviewList" class="review-list"></div>
-          <button id="downloadLoadedReviews" class="soft-btn full">불러온 리뷰 CSV 다운로드</button>
+          <div class="action-row">
+            <button id="downloadLoadedReviews" class="soft-btn" type="button">전체 리뷰 CSV 다운로드</button>
+            <button id="downloadFilteredReviews" class="soft-btn" type="button">현재 목록 CSV 다운로드</button>
+          </div>
+        </div>
+
+        <div class="admin-card">
+          <h3>백업 안내</h3>
+          <p class="desc small">정기적으로 스프레드시트를 복사하거나 Excel 파일로 다운로드해 보관하세요. 특히 Reviews 시트는 월말·사업평가 자료로 활용될 수 있습니다.</p>
+          <ol class="backup-list">
+            <li>Google Sheets 상단 메뉴 <b>파일</b> 클릭</li>
+            <li><b>사본 만들기</b> 또는 <b>다운로드 → Microsoft Excel(.xlsx)</b> 선택</li>
+            <li>파일명 예시: <b>프로그램일정리뷰_백업_2026-06</b></li>
+            <li>개인정보가 포함된 Reviews 시트는 외부 공유 금지</li>
+          </ol>
+          <a class="main-btn link-btn" href="https://docs.google.com/spreadsheets/d/1Sqj4r2NDXF76_XiFBcAYTcD5rHcu-nTsJSpXqt5_g-U/edit" target="_blank" rel="noopener">스프레드시트 열기</a>
         </div>
       </div>
     </section>
@@ -192,11 +319,11 @@
         <p class="kicker">Guide</p>
         <h2>처음 설정 순서</h2>
         <ol>
-          <li>구글 스프레드시트를 만들고 Apps Script 코드를 붙입니다.</li>
+          <li>운영용 문서를 준비하고 필요한 코드를 연결합니다.</li>
           <li>Apps Script를 웹앱으로 배포합니다.</li>
           <li>배포 URL을 이 파일의 <code>config.js</code>에 붙여넣습니다.</li>
           <li>GitHub Pages에 업로드합니다.</li>
-          <li>스프레드시트의 Programs 시트에 일정을 입력하면 앱 달력에 표시됩니다.</li>
+          <li>운영 문서에 프로그램을 입력하면 앱 달력에 자동으로 표시됩니다.</li>
         </ol>
         <p class="notice">자세한 순서는 README.md 파일을 확인하세요.</p>
       </div>
@@ -208,11 +335,11 @@
   <button class="nav active" data-page="home"><span>🏠</span><b>오늘</b></button>
   <button class="nav" data-page="calendar"><span>📅</span><b>달력</b></button>
   <button class="nav" data-page="my"><span>📝</span><b>나의 일정</b></button>
-  <button class="nav" data-page="review"><span>✍️</span><b>리뷰</b></button>
+  <button class="nav" data-page="review"><span>✍️</span><b>기록</b></button>
 </nav>
 
 <iframe name="hiddenSubmitFrame" id="hiddenSubmitFrame" class="hidden-frame"></iframe>
-<script src="./config.js?v=publicsheet20260629"></script>
-<script src="./app.js?v=publicsheet20260629"></script>
+<script src="./config.js?v=friendly20260629"></script>
+<script src="./app.js?v=friendly20260629"></script>
 </body>
 </html>

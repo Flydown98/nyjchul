@@ -1,4 +1,4 @@
-const CACHE_RESET_VERSION='publicsheet20260629';
+const CACHE_RESET_VERSION='friendly20260629';
 
 self.addEventListener('install', event => {
   self.skipWaiting();
