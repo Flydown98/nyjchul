@@ -145,3 +145,26 @@ Google Spreadsheet URL:
 https://flydown98.github.io/nyjchul/clear-cache.html?v=cachefix20260629
 
 이 페이지는 개인 일정 localStorage는 삭제하지 않고, 서비스워커와 CacheStorage만 삭제합니다.
+
+
+## 일정 불러오기 안정화 버전
+
+이번 버전은 기본 프로그램 일정 읽기를 Apps Script가 아니라 Google Sheets 공개 읽기(gviz) 방식으로 우선 처리합니다.
+
+필수 설정:
+1. 스프레드시트 열기
+2. 파일 > 공유 > 웹에 게시
+3. 시트 선택: Programs
+4. 형식: 웹페이지 또는 CSV 아무거나 가능
+5. 게시
+
+테스트:
+https://flydown98.github.io/nyjchul/sheet-test.html?v=publicsheet20260629
+
+앱:
+https://flydown98.github.io/nyjchul/?v=publicsheet20260629
+
+주의:
+- Programs 시트에는 개인정보를 넣지 마세요.
+- 리뷰 저장과 관리자 기능은 Apps Script를 계속 사용합니다.
+- 일정 읽기는 로그인 계정 문제를 피하기 위해 공개 스프레드시트 읽기 방식으로 바꿨습니다.

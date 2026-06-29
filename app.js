@@ -57,11 +57,89 @@ function bindEvents(){
   $('downloadLoadedReviews').addEventListener('click',()=>downloadCsv('제출리뷰.csv', loadedReviews));
 }
 async function loadPrograms(){
+  const cfg = window.APP_CONFIG || {};
+
+  if (cfg.USE_PUBLIC_SHEET_FOR_PROGRAMS && cfg.PROGRAMS_SHEET_ID) {
+    try {
+      const rows = await loadProgramsFromPublicSheet(cfg.PROGRAMS_SHEET_ID, cfg.PROGRAMS_SHEET_NAME || 'Programs');
+      programs = rows.map(normalizeProgram).filter(p => String(p.visible || 'Y').toUpperCase() !== 'N');
+      setSync(`공개 스프레드시트에서 일정 ${programs.length}개 불러옴`);
+      return;
+    } catch (e) {
+      console.warn('공개 스프레드시트 일정 불러오기 실패:', e);
+      setSync('공개 스프레드시트 불러오기 실패 · Apps Script 방식 재시도 중');
+    }
+  }
+
   const url = getScriptUrl();
-  if(!url){ programs = APP_CONFIG.LOCAL_SAMPLE_WHEN_EMPTY ? SAMPLE_PROGRAMS : []; setSync('스프레드시트 URL 미설정 · 샘플 일정 표시 중'); return; }
-  try{ const data=await jsonp(url,{action:'programs'}); if(data.ok){ programs=data.programs.map(normalizeProgram); setSync(`스프레드시트 연동 중 · 일정 ${programs.length}개 불러옴`); } else throw new Error(data.error||'불러오기 실패'); }
-  catch(e){ programs = APP_CONFIG.LOCAL_SAMPLE_WHEN_EMPTY ? SAMPLE_PROGRAMS : []; setSync('스프레드시트 불러오기 실패 · 샘플 또는 기존 자료 표시'); }
+  if(!url){ programs = (cfg.LOCAL_SAMPLE_WHEN_EMPTY ? SAMPLE_PROGRAMS : []); setSync('스프레드시트 URL 미설정 · 샘플 일정 표시 중'); return; }
+
+  try{
+    const data=await jsonp(url,{action:'programs'});
+    if(data.ok){
+      programs=data.programs.map(normalizeProgram).filter(p => String(p.visible || 'Y').toUpperCase() !== 'N');
+      setSync(`Apps Script 연동 중 · 일정 ${programs.length}개 불러옴`);
+    } else {
+      throw new Error(data.error||'불러오기 실패');
+    }
+  }
+  catch(e){
+    programs = (cfg.LOCAL_SAMPLE_WHEN_EMPTY ? SAMPLE_PROGRAMS : []);
+    setSync('스프레드시트 불러오기 실패 · 샘플 또는 기존 자료 표시');
+  }
 }
+
+function loadProgramsFromPublicSheet(sheetId, sheetName){
+  const encodedSheet = encodeURIComponent(sheetName);
+  const url = `https://docs.google.com/spreadsheets/d/${encodeURIComponent(sheetId)}/gviz/tq?sheet=${encodedSheet}`;
+  return new Promise((resolve, reject) => {
+    const cb = 'sheet_cb_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+    const script = document.createElement('script');
+    const timer = setTimeout(() => { cleanup(); reject(new Error('공개 스프레드시트 응답 시간 초과')); }, 10000);
+
+    function cleanup(){
+      clearTimeout(timer);
+      delete window[cb];
+      script.remove();
+    }
+
+    window[cb] = (response) => {
+      cleanup();
+      try {
+        if (!response || response.status === 'error') {
+          const msg = response && response.errors && response.errors[0] && response.errors[0].detailed_message;
+          throw new Error(msg || '공개 스프레드시트를 읽을 수 없습니다.');
+        }
+        resolve(gvizResponseToObjects(response));
+      } catch (err) {
+        reject(err);
+      }
+    };
+
+    script.onerror = () => { cleanup(); reject(new Error('공개 스프레드시트 스크립트 로드 실패')); };
+    script.src = url + `&tqx=responseHandler:${cb};out:json&v=` + Date.now();
+    document.body.appendChild(script);
+  });
+}
+
+function gvizResponseToObjects(response){
+  const table = response.table || {};
+  const cols = table.cols || [];
+  const rows = table.rows || [];
+
+  const headers = cols.map((col, idx) => String(col.label || col.id || '').trim() || ('col' + idx));
+
+  return rows.map(row => {
+    const cells = row.c || [];
+    const obj = {};
+    headers.forEach((header, idx) => {
+      const cell = cells[idx];
+      obj[header] = cell ? (cell.f || cell.v || '') : '';
+    });
+    return obj;
+  }).filter(obj => Object.values(obj).some(v => String(v).trim() !== ''));
+}
+
 function setSync(text){ $('syncStatus').textContent=text; const admin=$('adminSyncText'); if(admin) admin.textContent=text; }
 function renderAll(){ renderHome(); renderCalendar(); renderMyCalendar(); renderReviewPrograms(); }
 function renderHome(){ const todayPrograms=programsForDate(today()); $('todaySummary').innerHTML=`<div class="summary-card"><strong>${todayPrograms.length}</strong><span>오늘 일정</span></div><div class="summary-card"><strong>${programs.length}</strong><span>전체 일정</span></div>`; $('todayPrograms').innerHTML=programCards(todayPrograms,'오늘 등록된 일정이 없습니다.'); }

@@ -45,7 +45,7 @@
     <h1>앱 캐시 초기화 중</h1>
     <p>예전 파일을 삭제하고 최신 앱으로 다시 이동합니다.<br>개인 일정 데이터는 삭제하지 않습니다.</p>
     <div id="log">처리 중...</div>
-    <a href="./?v=cachefix20260629">바로 앱으로 이동</a>
+    <a href="./?v=publicsheet20260629">바로 앱으로 이동</a>
   </div>
 
   <script>
@@ -75,7 +75,7 @@
         log.textContent = messages.join('\n');
 
         setTimeout(() => {
-          location.replace('./?v=cachefix20260629');
+          location.replace('./?v=publicsheet20260629');
         }, 900);
       } catch (err) {
         log.textContent = '초기화 중 오류가 발생했습니다. 아래 버튼으로 이동해주세요.\n' + err.message;
