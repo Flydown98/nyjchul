@@ -218,4 +218,9 @@ function downloadCsv(name,rows){ if(!rows||!rows.length){alert('다운로드할 
 function csvEscape(v){ const s=String(v); return /[",\n\r]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s; }
 function ymd(y,m,d){return `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;} function today(){const d=new Date();return ymd(d.getFullYear(),d.getMonth()+1,d.getDate());}
 function normalizeDate(v){const s=String(v||'').trim().replace(/\./g,'-').replace(/\//g,'-');const m=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);return m?ymd(m[1],m[2],m[3]):s;} function normalizeTime(v){const s=String(v||'').trim();const m=s.match(/(\d{1,2}):?(\d{2})?/);return m?`${m[1].padStart(2,'0')}:${(m[2]||'00').padStart(2,'0')}`:s;} function stableId(parts){let h=0;const str=parts.join('__');for(let i=0;i<str.length;i++){h=((h<<5)-h)+str.charCodeAt(i);h|=0;}return 'id_'+Math.abs(h).toString(36);} function escapeHtml(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));} function escapeAttr(v){return escapeHtml(v).replace(/`/g,'&#096;');}
-function registerSW(){ if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(()=>{}); }
+function registerSW(){
+  if(!('serviceWorker' in navigator)) return;
+  navigator.serviceWorker.register('./sw.js', { updateViaCache: 'none' })
+    .then(reg => reg.update && reg.update())
+    .catch(()=>{});
+}

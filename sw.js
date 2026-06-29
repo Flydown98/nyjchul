@@ -1,5 +1,17 @@
-const CACHE='nyj-sheets-calendar-personal-v8';
-const ASSETS=['./','./index.html','./styles.css','./app.js','./config.js','./manifest.webmanifest','./install.html','./install.js','./assets/icon-192.png','./assets/icon-512.png','./assets/signature_horizontal_color.png','./assets/symbol_color.png'];
-self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS))));
-self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k))))));
-self.addEventListener('fetch',e=>e.respondWith(caches.match(e.request).then(c=>c||fetch(e.request))));
+const CACHE_RESET_VERSION='cachefix20260629';
+
+self.addEventListener('install', event => {
+  self.skipWaiting();
+});
+
+self.addEventListener('activate', event => {
+  event.waitUntil((async () => {
+    const keys = await caches.keys();
+    await Promise.all(keys.map(key => caches.delete(key)));
+    await self.clients.claim();
+  })());
+});
+
+self.addEventListener('fetch', event => {
+  event.respondWith(fetch(event.request));
+});
