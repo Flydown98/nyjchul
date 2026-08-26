@@ -1,0 +1,594 @@
+:root {
+  --navy:#172554; --blue:#2563eb; --blue-soft:#eff6ff; --green:#15803d; --green-soft:#ecfdf3;
+  --red:#b91c1c; --yellow:#92400e; --yellow-soft:#fffbeb; --ink:#172033; --muted:#667085;
+  --border:#d9e0ea; --surface:#fff; --background:#f5f7fb; --shadow:0 10px 30px rgba(23,37,84,.08);
+  font-family:Pretendard,"Noto Sans KR","Apple SD Gothic Neo",Arial,sans-serif;
+}
+*{box-sizing:border-box} body{margin:0;color:var(--ink);background:var(--background)} button,input,select{font:inherit} button{cursor:pointer}.hidden{display:none!important}
+.app-header{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:22px clamp(18px,5vw,64px);color:#fff;background:linear-gradient(135deg,#172554,#1d4ed8)}
+.app-header h1{margin:3px 0 0;font-size:clamp(1.35rem,3vw,2rem)} .eyebrow{margin:0;font-size:.78rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;opacity:.78}
+.header-actions{display:flex;align-items:center;gap:10px}.sync-notice{padding:12px clamp(18px,5vw,64px);background:#eef4ff;color:#344054;border-bottom:1px solid #dbe7ff;font-size:.9rem}
+.badge{display:inline-flex;align-items:center;padding:7px 11px;border-radius:999px;font-size:.78rem;font-weight:900}.badge.warning{color:#713f12;background:#fef3c7}.badge.connected{color:#166534;background:#dcfce7}.badge.error{color:#991b1b;background:#fee2e2}.badge.arrived{color:#166534;background:#dcfce7}.badge.pending{color:#475467;background:#f2f4f7}
+.main-nav{position:sticky;top:0;z-index:20;display:flex;gap:6px;overflow-x:auto;padding:10px clamp(12px,5vw,64px);background:rgba(255,255,255,.96);border-bottom:1px solid var(--border);backdrop-filter:blur(10px)}
+.nav-button{border:0;border-radius:10px;padding:11px 15px;color:#475467;background:transparent;font-weight:900;white-space:nowrap}.nav-button:hover,.nav-button.active{color:var(--navy);background:var(--blue-soft)}
+.container{width:min(1320px,calc(100% - 32px));margin:26px auto 60px}.view{display:none}.view.active{display:block}.section-heading{display:flex;justify-content:space-between;align-items:end;gap:16px;margin-bottom:18px}.section-heading h2{margin:3px 0 0;font-size:clamp(1.5rem,3vw,2rem)}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}.stat-card{padding:20px;border:1px solid var(--border);border-radius:18px;background:var(--surface);box-shadow:var(--shadow)}.stat-card span{display:block;color:var(--muted);font-weight:800}.stat-card strong{display:block;margin-top:10px;font-size:2rem;color:var(--navy)}.stat-card.success{background:var(--green-soft);border-color:#bbf7d0}.stat-card.success strong{color:var(--green)}.stat-card.muted strong{color:#667085}
+.two-column{display:grid;grid-template-columns:1fr 1fr;gap:18px}.panel,.auditorium-panel{padding:22px;border:1px solid var(--border);border-radius:18px;background:var(--surface);box-shadow:var(--shadow);margin-bottom:18px}.panel h3{margin:0 0 16px}.panel-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}.panel-heading h3{margin:0}.small-text,.help-text{color:var(--muted);font-size:.85rem}.empty-state{padding:28px;color:var(--muted);text-align:center;border:1px dashed var(--border);border-radius:14px}.quick-actions,.toolbar{display:flex;flex-wrap:wrap;gap:10px}
+.button{min-height:42px;border:1px solid transparent;border-radius:11px;padding:9px 14px;font-weight:900;transition:.15s ease}.button:hover{transform:translateY(-1px)}.button:disabled{opacity:.55;cursor:not-allowed;transform:none}.button.primary{color:#fff;background:var(--blue)}.button.secondary{color:var(--navy);background:#fff;border-color:var(--border)}.button.ghost{color:#fff;border-color:rgba(255,255,255,.5);background:transparent}.button.danger{color:#fff;background:var(--red)}.button.small{min-height:34px;padding:6px 9px;font-size:.82rem}.icon-button{width:40px;height:40px;border:0;border-radius:10px;font-size:1.8rem;background:#f2f4f7}
+.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.form-grid label,.stack-form label{display:grid;gap:7px;color:#344054;font-size:.9rem;font-weight:900}.form-grid .wide{grid-column:1/-1}.form-actions{display:flex;justify-content:flex-end}.stack-form{display:grid;gap:16px}input,select{width:100%;min-height:44px;border:1px solid var(--border);border-radius:10px;padding:10px 12px;color:var(--ink);background:#fff;outline:none}input:focus,select:focus{border-color:#93b4ff;box-shadow:0 0 0 4px rgba(37,99,235,.09)}
+.filter-row{display:grid;grid-template-columns:minmax(220px,1fr) 180px auto;gap:10px;align-items:center;margin-bottom:14px}.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:900px}th,td{padding:12px 10px;border-bottom:1px solid #edf0f5;text-align:left;vertical-align:middle}th{color:#475467;font-size:.8rem;background:#f8fafc}td{font-size:.9rem}.row-actions{display:flex;flex-wrap:wrap;gap:6px}
+.recent-list{display:grid;gap:8px}.recent-item{display:grid;grid-template-columns:1fr auto;gap:8px;padding:12px;border-radius:12px;background:#f8fafc}.recent-item strong{display:block}.recent-item span{color:var(--muted);font-size:.82rem}
+.scanner-box{min-height:280px;display:grid;place-items:center;overflow:hidden;border:2px dashed #bfdbfe;border-radius:16px;background:#f8fbff;color:var(--muted);text-align:center}.scanner-box video{border-radius:12px}.search-results{display:grid;gap:8px;margin-top:14px}.search-result-button{width:100%;border:1px solid var(--border);border-radius:12px;padding:12px;text-align:left;background:#f8fafc}.result-panel{border-width:2px}.result-card h3{font-size:1.5rem;margin-bottom:7px}.result-card .seat-large{margin:12px 0;font-size:clamp(2rem,8vw,4rem);color:var(--blue);font-weight:900}.result-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}.result-card.already{background:var(--yellow-soft);border-radius:14px;padding:18px}
+.legend{display:flex;flex-wrap:wrap;gap:12px;color:var(--muted);font-size:.85rem}.legend span{display:inline-flex;align-items:center;gap:6px}.legend-dot{width:12px;height:12px;border-radius:50%}.legend-dot.arrived{background:var(--green)}.legend-dot.pending{background:#64748b}.legend-dot.empty{background:#fff;border:1px solid var(--border)}
+/* 영화관형 좌석표 */
+.auditorium-panel{padding:30px;overflow:hidden;background:linear-gradient(180deg,#0f172a 0,#172033 23%,#f8fafc 23%,#fff 100%)}
+.stage-visual{position:relative;width:min(780px,88%);height:150px;margin:0 auto 18px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;background:linear-gradient(180deg,#334155,#111827);border:1px solid rgba(255,255,255,.18);border-radius:22px 22px 55% 55%/22px 22px 28px 28px;box-shadow:0 18px 40px rgba(0,0,0,.28),inset 0 -10px 0 rgba(255,255,255,.04);overflow:hidden}.stage-visual span{font-size:.7rem;letter-spacing:.35em;color:#cbd5e1}.stage-visual strong{margin-top:9px;font-size:1.5rem;letter-spacing:.08em}.stage-edge{position:absolute;left:8%;right:8%;bottom:18px;height:4px;border-radius:4px;background:linear-gradient(90deg,transparent,#93c5fd,#fff,#93c5fd,transparent);opacity:.75}.stage-light{position:absolute;top:-65px;width:160px;height:190px;background:linear-gradient(180deg,rgba(255,255,255,.23),rgba(147,197,253,.03));clip-path:polygon(44% 0,56% 0,100% 100%,0 100%);opacity:.55}.stage-light.left{left:14%;transform:rotate(-11deg)}.stage-light.right{right:14%;transform:rotate(11deg)}.screen-direction{text-align:center;color:#64748b;font-size:.75rem;font-weight:800;margin:12px 0 22px}.cinema-seat-map{display:grid;gap:13px;overflow-x:auto;padding:4px 8px 22px}.cinema-row{display:grid;grid-template-columns:38px max-content;align-items:center;gap:12px;min-width:max-content;margin:0 auto}.row-label{width:34px;height:34px;display:grid;place-items:center;border-radius:50%;background:#172554;color:#fff;font-weight:900}.seat-row-line{display:flex;align-items:center;gap:7px}.cinema-seat{width:58px;height:52px;border:0;border-radius:13px 13px 9px 9px;position:relative;padding:4px;background:#eef2f7;color:#475569;box-shadow:inset 0 -7px 0 rgba(15,23,42,.09),0 2px 5px rgba(15,23,42,.08);font-size:.72rem;font-weight:900}.cinema-seat::after{content:"";position:absolute;left:7px;right:7px;bottom:-5px;height:8px;border-radius:5px;background:inherit;filter:brightness(.9)}.cinema-seat.pending{background:#dbe3ee;color:#334155}.cinema-seat.arrived{background:#86efac;color:#14532d}.cinema-seat.empty{background:#fff;color:#94a3b8;border:1px dashed #cbd5e1;box-shadow:none}.cinema-seat.empty::after{display:none}.cinema-seat:hover:not(:disabled){transform:translateY(-2px)}.cinema-aisle{width:28px;flex:0 0 28px}.seat-name{display:block;margin-top:2px;font-size:.62rem;max-width:50px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.modal-backdrop{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:18px;background:rgba(15,23,42,.58)}.modal{width:min(620px,100%);max-height:90vh;overflow:auto;border-radius:18px;background:#fff;box-shadow:0 24px 80px rgba(15,23,42,.3)}.modal-header{position:sticky;top:0;display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--border);background:#fff}.modal-header h2{margin:0;font-size:1.25rem}#modalContent{padding:20px}.qr-detail{display:grid;place-items:center;gap:12px;text-align:center}.qr-code-box{min-height:220px;display:grid;place-items:center}.detail-list{width:100%;display:grid;gap:8px;text-align:left}.detail-list div{display:grid;grid-template-columns:90px 1fr;gap:10px;padding:10px 0;border-bottom:1px solid #edf0f5}.detail-list dt{color:var(--muted)}.detail-list dd{margin:0;font-weight:900}.toast{position:fixed;right:20px;bottom:20px;z-index:200;max-width:min(420px,calc(100% - 40px));padding:13px 16px;color:#fff;background:#111827;border-radius:12px;box-shadow:var(--shadow)}
+/* 로그인 */
+.login-overlay{position:fixed;inset:0;z-index:500;display:grid;place-items:center;padding:20px;background:radial-gradient(circle at 20% 15%,rgba(59,130,246,.25),transparent 36%),linear-gradient(145deg,#0f172a,#172554 60%,#1d4ed8)}.login-card{position:relative;width:min(440px,100%);padding:38px;border:1px solid rgba(255,255,255,.18);border-radius:28px;background:rgba(255,255,255,.96);box-shadow:0 34px 90px rgba(0,0,0,.35);overflow:hidden}.login-mark{position:absolute;right:-18px;top:-42px;color:rgba(37,99,235,.07);font:700 180px/1 Georgia,serif}.login-card h1{position:relative;margin:6px 0 12px;font-size:1.8rem}.login-help{position:relative;margin:0 0 26px;color:var(--muted);line-height:1.6}.login-button{margin-top:4px}.login-message{margin-top:14px;padding:12px;border-radius:10px;color:#991b1b;background:#fee2e2;font-size:.9rem}.login-footnote{margin:18px 0 0;color:#7c8797;font-size:.76rem;line-height:1.5}.login-footnote code{background:#eef2f7;border-radius:5px;padding:2px 5px}
+@media(max-width:900px){.stats-grid{grid-template-columns:repeat(2,1fr)}.two-column{grid-template-columns:1fr}.filter-row{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.form-grid .wide{grid-column:auto}.section-heading{align-items:start;flex-direction:column}.auditorium-panel{padding:22px 12px}.stage-visual{height:125px}.cinema-seat{width:52px;height:48px}.cinema-aisle{width:20px;flex-basis:20px}}
+@media(max-width:560px){.app-header{align-items:flex-start;flex-direction:column}.header-actions{width:100%;justify-content:space-between}.container{width:min(100% - 18px,1320px)}.stats-grid{grid-template-columns:1fr 1fr;gap:9px}.stat-card{padding:15px}.stat-card strong{font-size:1.55rem}.login-card{padding:30px 22px}.main-nav{padding-left:8px;padding-right:8px}.cinema-seat{width:46px;height:44px;font-size:.65rem}.seat-name{display:none}.row-label{width:30px;height:30px}.cinema-row{gap:8px}.seat-row-line{gap:5px}}
+
+/* 500석 좌석표 가독성 보정 */
+.cinema-seat{width:36px;height:42px;border-radius:9px 9px 7px 7px;font-size:.64rem;padding:3px}.cinema-seat::after{left:5px;right:5px;height:6px}.seat-name{display:none}.seat-row-line{gap:5px}.cinema-aisle{width:20px;flex:0 0 20px}.cinema-row{gap:9px}.cinema-seat-map{gap:10px}
+
+
+/* v1.3 runway seating */
+.legend-dot.vip{background:#f4c95d}.legend-dot.wheelchair{background:#38bdf8}.wheelchair-badge{display:inline-block;margin-left:5px;padding:2px 6px;border-radius:999px;background:#dbeafe;color:#1d4ed8;font-size:.68rem;font-weight:900}.wheelchair-admin-check{display:flex;align-items:center;gap:10px}.wheelchair-admin-check input{width:20px;height:20px}
+.runway-auditorium{overflow-x:auto}.runway-stage{width:min(980px,94%)}.runway-head{width:76px;margin:0 auto -4px;padding:9px 5px;text-align:center;border-radius:12px 12px 0 0;background:linear-gradient(180deg,#d8c29b,#ae8b54);color:#3a2a16;font-size:.7rem;font-weight:950;letter-spacing:.13em}.runway-seat-map{display:grid;gap:7px;min-width:1200px;padding:0 10px 16px}.runway-row{display:grid;grid-template-columns:1fr 78px 1fr;align-items:center;gap:9px;min-width:1180px;margin:0 auto}.runway-side{display:flex;align-items:center;gap:7px}.runway-left{justify-content:flex-end}.runway-right{justify-content:flex-start}.runway-side-seats{display:flex;gap:4px}.runway-row-label{width:30px;color:#64748b;font-size:.68rem;font-weight:900;text-align:center}.runway-spine{align-self:stretch;min-height:42px;display:grid;place-items:center;background:linear-gradient(90deg,#d9c59e,#f0e2c6,#d9c59e);border-left:1px solid #c7ac7a;border-right:1px solid #c7ac7a;color:#765d34;font-size:.62rem;font-weight:950}.runway-seat{width:34px;height:38px;border:1px solid transparent;border-radius:8px;padding:2px;background:#f8fafc;color:#475569;cursor:pointer;box-shadow:inset 0 -5px 0 rgba(15,23,42,.07);font-size:.62rem;font-weight:900}.runway-seat span{display:none}.runway-seat:hover{transform:translateY(-2px);outline:2px solid rgba(37,99,235,.18)}.runway-seat.zone-vip{background:#fff0b8;color:#765614;border-color:#e2bf51}.runway-seat.zone-staff{background:#ede9fe;color:#5b21b6;border-color:#c4b5fd}.runway-seat.zone-wheelchair{background:#dbeafe;color:#1d4ed8;border-color:#93c5fd}.runway-seat.zone-extra{background:#e2e8f0}.runway-seat.wheelchair-anchor{outline:2px dashed #0ea5e9}.runway-seat.wheelchair-person{background:#7dd3fc!important;color:#0c4a6e!important;border-color:#0284c7!important;box-shadow:0 0 0 2px #38bdf8}.runway-seat.pending{box-shadow:inset 0 -5px 0 rgba(15,23,42,.13),0 0 0 2px #64748b}.runway-seat.arrived{background:#86efac;color:#14532d;border-color:#4ade80;box-shadow:0 0 0 2px #22c55e}.runway-seat.disabled-seat{opacity:.35;background:#fee2e2}.rear-extra-label{margin:18px auto 7px;text-align:center;color:#64748b;font-size:.72rem;font-weight:900}.extra-seat-map{border-top:1px dashed #cbd5e1;padding-top:12px}.seat-zone-editor{margin-bottom:18px}.seat-manage-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:18px}.seat-manage-summary>div{padding:12px;border-radius:12px;background:#f8fafc;border:1px solid #e2e8f0}.seat-manage-summary span{display:block;color:#64748b;font-size:.72rem}.seat-manage-summary strong{display:block;margin-top:5px}.modal-separator{border:0;border-top:1px solid #e2e8f0;margin:22px 0}@media(max-width:700px){.seat-manage-summary{grid-template-columns:1fr}.runway-seat-map{min-width:1110px}.runway-row{min-width:1090px;grid-template-columns:1fr 62px 1fr}.runway-seat{width:31px;height:35px}}
+
+/* v1.4 searchable seat assignment */
+.wheelchair-location-banner{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:0 0 16px;padding:13px 16px;border:1px solid #7dd3fc;border-radius:16px;background:#ecfeff;color:#0c4a6e}
+.wheelchair-location-banner strong{font-size:.9rem}.wheelchair-location-banner span{padding:5px 9px;border-radius:999px;background:#0ea5e9;color:#fff;font-weight:950}.wheelchair-location-banner small{color:#0369a1}
+.wheelchair-seat-icon{position:absolute;top:-8px;left:50%;transform:translateX(-50%);display:grid!important;place-items:center;width:18px;height:18px;border-radius:50%;background:#0284c7;color:#fff;font-style:normal;font-size:10px;z-index:3;box-shadow:0 2px 6px rgba(2,132,199,.35)}
+.runway-seat{position:relative;overflow:visible}
+.seat-person-search-panel{margin-bottom:16px}
+.seat-person-search-form{display:grid;grid-template-columns:1fr auto;gap:8px}
+.seat-person-search-form input,.seat-modal-search input{width:100%;min-height:46px;border:1px solid #cbd5e1;border-radius:12px;padding:0 13px;font-size:.95rem}
+.seat-person-search-results{display:grid;gap:7px;margin-top:10px;max-height:360px;overflow:auto}
+.seat-person-result{width:100%;display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;text-align:left;border:1px solid #e2e8f0;border-radius:13px;background:#fff;padding:11px 13px;cursor:pointer}
+.seat-person-result:hover{border-color:#60a5fa;background:#eff6ff}
+.seat-person-result.wheelchair-requester{border-left:5px solid #0ea5e9;background:#f0f9ff}
+.seat-person-main strong,.seat-person-main span{display:block}.seat-person-main span{margin-top:4px;color:#64748b;font-size:.78rem}
+.seat-person-meta{text-align:right}.seat-person-meta b,.seat-person-meta span{display:block}.seat-person-meta span{margin-top:4px;color:#475569;font-size:.76rem}
+.seat-selected-person{position:sticky;top:72px;z-index:20;margin-top:12px;padding:12px 14px;border-radius:14px;background:#172554;color:#fff;display:flex;justify-content:space-between;align-items:center;gap:12px;box-shadow:0 10px 26px rgba(23,37,84,.25)}
+.seat-selected-person>div:first-child strong,.seat-selected-person>div:first-child span{display:block}.seat-selected-person>div:first-child span{margin-top:4px;color:#cbd5e1;font-size:.78rem}
+.seat-selected-person>div:last-child{display:flex;align-items:center;gap:9px}.seat-selected-person b{color:#fde68a}
+.empty-state.compact{padding:12px}
+.seat-modal-search{margin-bottom:10px}
+@media(max-width:700px){
+  .seat-person-search-form{grid-template-columns:1fr}
+  .seat-person-result{grid-template-columns:1fr}
+  .seat-person-meta{text-align:left;display:flex;gap:10px}
+  .seat-selected-person{top:58px;align-items:flex-start;flex-direction:column}
+}
+
+
+/* v2.0 — 450석 한눈에 보기 */
+.runway-auditorium{
+  overflow-x:hidden!important;
+  padding:22px 16px!important;
+}
+.runway-stage{
+  width:min(780px,80%)!important;
+  height:105px!important;
+  margin-bottom:10px!important;
+}
+.runway-head{
+  width:52px!important;
+  padding:6px 3px!important;
+  font-size:.58rem!important;
+}
+.runway-seat-map{
+  width:100%!important;
+  min-width:0!important;
+  gap:3px!important;
+  padding:0 2px 8px!important;
+}
+.runway-row{
+  width:100%!important;
+  min-width:0!important;
+  grid-template-columns:minmax(0,1fr) 48px minmax(0,1fr)!important;
+  gap:4px!important;
+}
+.runway-side{
+  min-width:0!important;
+  gap:3px!important;
+}
+.runway-side-seats{
+  flex:1 1 auto!important;
+  min-width:0!important;
+  display:grid!important;
+  grid-template-columns:repeat(10,minmax(0,1fr))!important;
+  gap:2px!important;
+}
+.runway-row-label{
+  width:22px!important;
+  font-size:.56rem!important;
+}
+.runway-spine{
+  min-height:25px!important;
+  font-size:.52rem!important;
+}
+.runway-seat{
+  width:100%!important;
+  min-width:0!important;
+  height:25px!important;
+  min-height:25px!important;
+  border-radius:5px!important;
+  padding:1px!important;
+  font-size:.52rem!important;
+  box-shadow:inset 0 -3px 0 rgba(15,23,42,.07)!important;
+}
+.runway-seat strong{
+  font-size:clamp(6px,.55vw,9px)!important;
+}
+.runway-seat:hover{
+  transform:scale(1.15)!important;
+  z-index:8!important;
+}
+.wheelchair-seat-icon{
+  width:14px!important;
+  height:14px!important;
+  top:-8px!important;
+  font-size:8px!important;
+}
+.runway-seat.zone-vip{
+  background:#f7d96b!important;
+  color:#5b4300!important;
+  border-color:#d7aa16!important;
+}
+.runway-seat.zone-wheelchair,
+.runway-seat.wheelchair-anchor{
+  background:#bae6fd!important;
+  color:#075985!important;
+  border-color:#0ea5e9!important;
+}
+.rear-extra-label,.extra-seat-map{display:none!important}
+
+@media(max-width:900px){
+  .runway-row{
+    grid-template-columns:minmax(0,1fr) 38px minmax(0,1fr)!important;
+  }
+  .runway-seat{
+    height:21px!important;
+    min-height:21px!important;
+  }
+  .runway-row-label{display:none!important}
+  .runway-side{gap:1px!important}
+  .runway-side-seats{gap:1px!important}
+}
+
+
+/* v2.1 VIP 24 + operational seat status colors */
+.vip-location-banner{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
+  margin:0 0 10px;
+  padding:13px 16px;
+  border:1px solid #e4bd36;
+  border-radius:16px;
+  background:#fff8d8;
+  color:#664d03;
+}
+.vip-location-banner strong{font-size:.9rem}
+.vip-location-banner span{
+  padding:5px 9px;
+  border-radius:999px;
+  background:#e4b827;
+  color:#3e2e00;
+  font-weight:950;
+}
+.vip-location-banner small{color:#80640a}
+
+/* 구역 기본색: 비어 있는 VIP만 황금색 */
+.runway-seat.zone-vip.empty{
+  background:#f7d96b!important;
+  color:#5b4300!important;
+  border-color:#d7aa16!important;
+  box-shadow:inset 0 -3px 0 rgba(91,67,0,.13)!important;
+}
+
+/* 일반 포함 모든 '배정 완료 / 아직 미도착' 좌석 */
+.runway-seat.pending{
+  background:#86efac!important;
+  color:#14532d!important;
+  border-color:#22c55e!important;
+  box-shadow:0 0 0 1.5px #22c55e, inset 0 -3px 0 rgba(20,83,45,.12)!important;
+}
+
+/* QR/수동 체크인까지 완료한 현장도착 좌석 */
+.runway-seat.arrived{
+  background:#c4b5fd!important;
+  color:#4c1d95!important;
+  border-color:#8b5cf6!important;
+  box-shadow:0 0 0 1.5px #8b5cf6, inset 0 -3px 0 rgba(76,29,149,.12)!important;
+}
+
+/* 휠체어 구역은 비어 있을 때만 파란색. 배정/도착 시 상태색이 우선 */
+.runway-seat.zone-wheelchair.empty,
+.runway-seat.wheelchair-anchor.empty{
+  background:#bae6fd!important;
+  color:#075985!important;
+  border-color:#0ea5e9!important;
+}
+
+/* 예전 wheelchair-person !important보다 상태 표시가 뒤에서 우선하도록 다시 명시 */
+.runway-seat.wheelchair-person.pending{
+  background:#86efac!important;
+  color:#14532d!important;
+  border-color:#22c55e!important;
+}
+.runway-seat.wheelchair-person.arrived{
+  background:#c4b5fd!important;
+  color:#4c1d95!important;
+  border-color:#8b5cf6!important;
+}
+
+/* 범례 */
+.legend-dot.vip{background:#f7d96b!important;border:1px solid #d7aa16}
+.legend-dot.pending{background:#86efac!important;border:1px solid #22c55e}
+.legend-dot.arrived{background:#c4b5fd!important;border:1px solid #8b5cf6}
+.legend-dot.wheelchair{background:#bae6fd!important;border:1px solid #0ea5e9}
+
+.runway-auditorium{position:relative}.auditorium-entry-marker{position:absolute;top:12px;right:12px;z-index:12;display:flex;align-items:center;gap:7px;padding:8px 11px;border:2px solid #0ea5e9;border-radius:12px;background:#ecfeff;color:#075985;box-shadow:0 5px 18px rgba(14,165,233,.18)}.auditorium-entry-marker span{font-size:11px;font-weight:950}.auditorium-entry-marker strong{font-size:20px;line-height:1}.wheelchair-stat{border-color:#7dd3fc!important;background:#f0f9ff!important}.wheelchair-stat strong{color:#0369a1!important}.runway-seat.wheelchair-anchor.empty{background:#bae6fd!important;color:#075985!important;border-color:#0ea5e9!important}.runway-seat.wheelchair-person.pending{background:#86efac!important;color:#14532d!important;border-color:#22c55e!important}.runway-seat.wheelchair-person.arrived{background:#c4b5fd!important;color:#4c1d95!important;border-color:#8b5cf6!important}
+
+
+/* v2.4 individual + lucky draw */
+.lucky-button,
+.lucky-primary{
+  border-color:#d3a51f!important;
+  background:#f5cc4b!important;
+  color:#493500!important;
+}
+.lucky-primary{
+  min-height:44px;
+  padding:0 16px;
+  border:0;
+  border-radius:12px;
+  font-weight:950;
+  cursor:pointer;
+}
+.lucky-draw-register-panel textarea,
+#participantForm textarea,
+#editParticipantForm textarea{
+  width:100%;
+  resize:vertical;
+  min-height:90px;
+  border:1px solid #cbd5e1;
+  border-radius:12px;
+  padding:11px 12px;
+  font:inherit;
+}
+.lucky-mini{
+  display:inline-block;
+  padding:4px 7px;
+  border-radius:999px;
+  background:#fff1aa;
+  color:#674b00;
+  font-size:11px;
+  font-weight:900;
+}
+.lucky-mini.redeemed{
+  background:#ede9fe;
+  color:#5b21b6;
+}
+.winner-alert{
+  margin:16px 0;
+  padding:18px;
+  border:2px solid #e4b827;
+  border-radius:18px;
+  background:linear-gradient(135deg,#fff7c7,#fff);
+  text-align:center;
+}
+.winner-alert>span{
+  display:block;
+  color:#9a6a00;
+  font-size:12px;
+  font-weight:950;
+  letter-spacing:.08em;
+}
+.winner-alert>strong{
+  display:block;
+  margin-top:7px;
+  color:#513b00;
+  font-size:20px;
+}
+.winner-alert p{
+  margin:7px 0 13px;
+  color:#80640a;
+}
+.winner-alert.redeemed{
+  border-color:#8b5cf6;
+  background:#f5f3ff;
+}
+.not-winner-alert{
+  margin:16px 0;
+  padding:14px 16px;
+  border-radius:15px;
+  background:#f1f5f9;
+  color:#475569;
+  text-align:center;
+}
+.not-winner-alert strong,
+.not-winner-alert span{display:block}
+.not-winner-alert span{margin-top:4px;font-size:12px}
+.participant-note{
+  padding:11px 13px;
+  border-radius:12px;
+  background:#f8fafc;
+  text-align:left;
+}
+
+/* v2.5 operation clean */
+.admin-sensitive-note{
+  margin:0 0 14px;
+  padding:12px 14px;
+  border:1px solid #f0c36c;
+  border-radius:13px;
+  background:#fff9e8;
+  color:#6f5100;
+  font-size:12px;
+  line-height:1.6;
+}
+.draw-stat-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:10px;
+  margin:0 0 14px;
+}
+.draw-stat-grid article{
+  padding:13px 14px;
+  border:1px solid #e5e7eb;
+  border-radius:14px;
+  background:#fff;
+}
+.draw-stat-grid span{
+  display:block;
+  color:#64748b;
+  font-size:11px;
+  font-weight:800;
+}
+.draw-stat-grid strong{
+  display:block;
+  margin-top:4px;
+  font-size:22px;
+}
+.draw-filter-actions{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.draw-filter-actions label{
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  gap:6px;
+  font-size:12px;
+}
+.draw-filter-actions input[type="checkbox"]{
+  width:17px;
+  height:17px;
+}
+@media(max-width:800px){
+  .draw-stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+
+
+/* v2.7.2 장애인 우선 앞쪽 3열 */
+.legend-dot.disabled-priority{
+  background:#fed7aa!important;
+  border:1px solid #f97316;
+}
+.disabled-priority-banner{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
+  margin:0 0 10px;
+  padding:13px 16px;
+  border:1px solid #fdba74;
+  border-radius:16px;
+  background:#fff7ed;
+  color:#9a3412;
+}
+.disabled-priority-banner strong{font-size:.9rem}
+.disabled-priority-banner span{
+  padding:5px 9px;
+  border-radius:999px;
+  background:#f97316;
+  color:#fff;
+  font-weight:950;
+}
+.disabled-priority-banner small{color:#9a3412}
+.runway-seat.zone-disabled-priority.empty{
+  background:#ffedd5!important;
+  color:#9a3412!important;
+  border-color:#fb923c!important;
+  box-shadow:inset 0 -5px 0 rgba(154,52,18,.08);
+}
+.disabled-priority-icon{
+  position:absolute;
+  top:-8px;
+  left:50%;
+  transform:translateX(-50%);
+  display:grid!important;
+  place-items:center;
+  min-width:25px;
+  height:17px;
+  padding:0 4px;
+  border-radius:999px;
+  background:#f97316;
+  color:#fff;
+  font-style:normal;
+  font-size:8px;
+  font-weight:950;
+  z-index:3;
+  box-shadow:0 2px 6px rgba(249,115,22,.28);
+}
+.disabled-person-badge{
+  display:inline-block;
+  margin-left:5px;
+  padding:2px 6px;
+  border-radius:999px;
+  background:#ffedd5;
+  color:#c2410c;
+  font-size:.68rem;
+  font-weight:900;
+}
+/* 배정/도착 상태색은 지정석 배경보다 우선 */
+.runway-seat.zone-disabled-priority.pending{
+  background:#86efac!important;
+  color:#14532d!important;
+  border-color:#22c55e!important;
+}
+.runway-seat.zone-disabled-priority.arrived{
+  background:#c4b5fd!important;
+  color:#4c1d95!important;
+  border-color:#8b5cf6!important;
+}
+
+/* v2.7.3 장애인(휠체어) A~C 72석 */
+.disabled-priority-banner{background:#eff8ff!important;border-color:#7dd3fc!important;color:#075985!important}
+.disabled-priority-banner span{background:#0284c7!important}
+.disabled-priority-banner small{color:#075985!important}
+.legend-dot.disabled-priority{background:#bae6fd!important;border-color:#0284c7!important}
+.runway-seat.zone-disabled-priority.empty{background:#e0f2fe!important;border-color:#38bdf8!important;color:#075985!important}
+.runway-seat.zone-disabled-priority .wheelchair-seat-icon{background:#0284c7!important}
+.runway-seat.zone-disabled-priority.pending{background:#86efac!important;color:#14532d!important;border-color:#22c55e!important}
+.runway-seat.zone-disabled-priority.arrived{background:#c4b5fd!important;color:#4c1d95!important;border-color:#8b5cf6!important}
+
+
+/* =====================================================================
+   v2.7.5 — 관리자 PWA 설치 UI
+   ===================================================================== */
+.admin-install-button{
+  border-color:#93c5fd!important;
+  background:#eff6ff!important;
+  color:#1d4ed8!important;
+  font-weight:900!important;
+}
+.admin-install-button:hover{
+  background:#dbeafe!important;
+}
+.admin-app-panel{
+  border:1px solid #c7d8f5!important;
+  background:linear-gradient(135deg,#f8fbff,#eef5ff)!important;
+}
+.admin-app-install-note{
+  margin:10px 0 0;
+}
+.admin-install-guide{
+  text-align:left;
+}
+.admin-install-guide h3{
+  margin:5px 0 12px;
+}
+.admin-install-guide ol{
+  margin:12px 0;
+  padding-left:23px;
+  line-height:1.85;
+}
+.admin-install-guide p{
+  line-height:1.65;
+}
+.admin-install-icon{
+  width:58px;
+  height:58px;
+  display:grid;
+  place-items:center;
+  margin-bottom:14px;
+  border-radius:17px;
+  background:#172554;
+  color:#fff;
+  font-size:24px;
+  font-weight:950;
+  box-shadow:0 10px 24px rgba(23,37,84,.2);
+}
+body.admin-pwa-standalone .admin-app-install-trigger{
+  display:none!important;
+}
+@media(max-width:620px){
+  .header-actions .admin-install-button{
+    padding:9px 11px;
+    font-size:.78rem;
+  }
+}
+
+
+/* v2.8 고속 QR 스캐너 */
+.scanner-mode-badge{display:inline-flex;align-items:center;min-height:24px;margin-left:6px;padding:3px 8px;border-radius:999px;background:#e9eef6;color:#526074;font-size:.68rem;font-weight:900;vertical-align:middle}
+.fast-scanner-box{position:relative;min-height:340px;overflow:hidden;background:#070b12}
+.native-scanner-video{width:100%;height:min(58vh,520px);display:block;object-fit:cover;background:#000}
+.native-scanner-guide{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none}
+.native-scanner-guide span{position:relative;width:min(72%,360px);aspect-ratio:1;border:3px solid rgba(255,255,255,.94);border-radius:26px;box-shadow:0 0 0 999px rgba(0,0,0,.18),inset 0 0 28px rgba(255,255,255,.09)}
+.native-scanner-guide span::after{content:'QR을 이 영역에 보여주세요';position:absolute;left:50%;bottom:-50px;transform:translateX(-50%);width:max-content;max-width:88vw;padding:7px 12px;border-radius:999px;background:rgba(0,0,0,.64);color:#fff;font-size:.76rem;font-weight:850}
+.fast-scan-status{display:flex;align-items:center;gap:8px;margin-top:11px;color:#475569;font-size:.82rem}
+.scanner-status-dot{width:10px;height:10px;flex:0 0 auto;border-radius:50%;background:#94a3b8}
+.scanner-status-dot.busy{background:#f59e0b;animation:scannerPulse 1s infinite}.scanner-status-dot.ok{background:#22c55e}.scanner-status-dot.error{background:#ef4444}
+@keyframes scannerPulse{50%{opacity:.35;transform:scale(.78)}}
+#reader video{max-height:min(58vh,520px)!important;object-fit:cover!important}#reader__scan_region{min-height:320px!important}
+@media(max-width:650px){.fast-scanner-box{min-height:300px}.native-scanner-video{height:52vh;min-height:300px}}
+
+
+/* =====================================================================
+   v2.8.1 — 10+10 좌석배치도 버그 수정
+   기존 15칸 그리드 잔여설정 제거
+   ===================================================================== */
+.runway-side-seats{
+  grid-template-columns:repeat(10,minmax(0,1fr))!important;
+  width:100%!important;
+}
+.runway-seat{
+  min-height:34px!important;
+}
+@media(max-width:700px){
+  .runway-seat-map{
+    min-width:760px!important;
+  }
+  .runway-row{
+    min-width:740px!important;
+  }
+}
+
+/* v2.8.2 참여불가 버튼 */
+.button.danger-outline{border-color:#fecaca;background:#fff;color:#b91c1c}
+.button.danger-outline:hover{background:#fef2f2}
+
+
+/* =====================================================================
+   v2.9 마블룰렛 연결
+   ===================================================================== */
+.marble-roulette-launch-panel{
+  display:flex;align-items:center;justify-content:space-between;gap:24px;
+  overflow:hidden;position:relative;
+  background:linear-gradient(135deg,#111827,#312e81 58%,#6d28d9)!important;
+  color:#fff!important;border:0!important;
+}
+.marble-roulette-launch-panel::after{
+  content:'';position:absolute;width:220px;height:220px;border-radius:50%;
+  right:-60px;top:-110px;background:rgba(255,255,255,.08);pointer-events:none;
+}
+.marble-roulette-launch-copy{position:relative;z-index:1;max-width:720px}
+.marble-roulette-launch-copy h3{margin:7px 0 8px;font-size:1.35rem;color:#fff}
+.marble-roulette-launch-copy p{margin:0;color:rgba(255,255,255,.78);line-height:1.65}
+.marble-roulette-badge{
+  display:inline-flex;padding:5px 9px;border:1px solid rgba(255,255,255,.25);
+  border-radius:999px;font-size:.68rem;font-weight:900;letter-spacing:.12em;
+  background:rgba(255,255,255,.08)
+}
+.marble-roulette-open-button{
+  position:relative;z-index:1;flex:0 0 auto;background:#fff!important;color:#312e81!important;
+  border:0!important;font-weight:950!important;box-shadow:0 12px 30px rgba(0,0,0,.2)
+}
+.marble-quick-button{text-decoration:none}
+@media(max-width:700px){
+  .marble-roulette-launch-panel{align-items:stretch;flex-direction:column}
+  .marble-roulette-open-button{width:100%;justify-content:center}
+}
+
+/* v3.0 동반좌석 / 재정렬 / 엑셀 */
+.seat-ops-grid{display:grid;grid-template-columns:1.35fr 1fr;gap:14px}.seat-op-box{padding:16px;border:1px solid #e2e8f0;border-radius:16px;background:#f8fafc}.seat-op-box h4{margin:0 0 8px}.inline-form{display:grid;grid-template-columns:1fr auto;gap:8px;margin:12px 0}.companion-search-results{display:grid;gap:7px;max-height:280px;overflow:auto;margin-bottom:12px}.companion-result-item{display:flex;align-items:center;gap:10px;padding:10px 11px;border:1px solid #dde5ef;border-radius:12px;background:#fff;cursor:pointer}.companion-result-item span{display:grid;gap:2px}.companion-result-item small{color:#64748b}.button-row{display:flex;gap:8px;flex-wrap:wrap}.excel-import-grid{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:9px;align-items:center}.excel-import-preview{margin-top:14px}.excel-preview-summary{display:flex;gap:14px;align-items:center;margin-bottom:10px}.excel-preview-table-wrap{overflow:auto;max-height:380px}.excel-preview-table{width:100%;border-collapse:collapse;font-size:.82rem}.excel-preview-table th,.excel-preview-table td{padding:8px 9px;border-bottom:1px solid #e5e7eb;text-align:left;white-space:nowrap}.table-sub-badge{display:inline-block;margin-top:4px;padding:2px 6px;border-radius:999px;background:#eef2ff;color:#4338ca;font-size:.65rem}.table-sub-badge.unavailable{background:#f1f5f9;color:#64748b}@media(max-width:800px){.seat-ops-grid{grid-template-columns:1fr}.excel-import-grid{grid-template-columns:1fr}}

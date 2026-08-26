@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#172554" />
+  <title>20주년 행사 관리자</title>
+  <link rel="stylesheet" href="style.css?v=5.0" />
+  <link rel="manifest" href="admin-manifest.webmanifest" />
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/admin-app-icon-180.png" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="20주년 관리자" />
+
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+  <div id="loginOverlay" class="login-overlay">
+    <section class="login-card" aria-labelledby="loginTitle">
+      <div class="login-mark">20</div>
+      <p class="eyebrow">ADMINISTRATION</p>
+      <h1 id="loginTitle">20주년 행사 관리자</h1>
+      <p class="login-help">관리자 아이디와 비밀번호를 입력하세요. 로그인은 이 기기에서 24시간 유지됩니다.</p>
+      <form id="loginForm" class="stack-form" autocomplete="on">
+        <label>아이디
+          <input id="adminUsername" name="username" required autocomplete="username" placeholder="관리자 아이디" />
+        </label>
+        <label>비밀번호
+          <input id="adminPassword" name="password" type="password" required autocomplete="current-password" placeholder="관리자 비밀번호" />
+        </label>
+        <button id="loginButton" class="button primary login-button" type="submit">로그인</button>
+      </form>
+      <div id="loginMessage" class="login-message hidden" role="alert"></div>
+      <p class="login-footnote">아이디와 비밀번호는 GitHub 파일이 아니라 Google Apps Script의 <code>Code.gs</code>에서 설정합니다.</p>
+    </section>
+  </div>
+
+  <header class="app-header">
+    <div>
+      <p class="eyebrow">남양주시장애인복지관</p>
+      <h1 id="headerEventName">20주년 기념행사 QR 접수</h1>
+    </div>
+    <div class="header-actions">
+      <button class="button admin-install-button admin-app-install-trigger" type="button" title="이 기기에 관리자 웹앱 설치">앱 설치</button>
+      <span id="storageBadge" class="badge warning">로그인 필요</span>
+      <button id="logoutButtonTop" class="button ghost" type="button">로그아웃</button>
+    </div>
+  </header>
+
+  <div class="sync-notice">
+    <strong>관리자 전용 화면</strong> — 1인 1QR 개인 신청, 300석 좌석배정, 현장 QR 확인과 행운추첨 상품 수령을 관리합니다.
+  </div>
+
+  <nav class="main-nav" aria-label="주요 메뉴">
+    <button class="nav-button active" data-view="dashboard" type="button">현황</button>
+    <button class="nav-button" data-view="participants" type="button">참가자</button>
+    <button class="nav-button" data-view="checkin" type="button">QR 접수</button>
+    <button class="nav-button" data-view="seats" type="button">좌석배치도</button>
+    <button class="nav-button" data-view="draw" type="button">행운추첨</button>
+    <button class="nav-button" data-view="settings" type="button">행사 설정</button>
+  </nav>
+
+  <main class="container">
+    <section id="view-dashboard" class="view active">
+      <div class="section-heading">
+        <div><p class="eyebrow">LIVE STATUS</p><h2>행사 접수 현황</h2><p id="lastSyncLabel" class="small-text">아직 동기화되지 않았습니다.</p></div>
+        <button id="refreshDashboardButton" class="button secondary" type="button">새로고침</button>
+      </div>
+      <div class="stats-grid">
+        <article class="stat-card"><span>개인 신청</span><strong id="statApplications">0</strong></article>
+        <article class="stat-card"><span>등록 인원</span><strong id="statTotal">0</strong></article>
+        <article class="stat-card success"><span>현장 도착</span><strong id="statArrived">0</strong></article>
+        <article class="stat-card"><span>도착률</span><strong id="statRate">0%</strong></article><article class="stat-card wheelchair-stat"><span>휠체어 이용</span><strong id="statWheelchair">0명</strong></article><article class="stat-card"><span>복지관 이용</span><strong id="statCenterUsers">0</strong></article><article class="stat-card"><span>장애인 당사자</span><strong id="statDisabledPersons">0</strong></article><article class="stat-card"><span>좌석 미배정</span><strong id="statUnassigned">0</strong></article>
+      </div>
+      <div class="two-column">
+        <article class="panel"><div class="panel-heading"><h3>최근 도착</h3><span class="small-text">최근 8명</span></div><div id="recentCheckins" class="empty-state">아직 도착한 참가자가 없습니다.</div></article>
+        <article class="panel"><h3>빠른 실행</h3><div class="quick-actions"><button class="button primary" data-go="checkin" type="button">QR 스캔 시작</button><button class="button secondary" data-go="seats" type="button">좌석배치도 보기</button><button class="button secondary lucky-button" data-go="draw" type="button">행운추첨 관리</button><a class="button secondary marble-quick-button" href="roulette/" target="_blank" rel="noopener">마블룰렛</a><button id="exportCsvDashboardButton" class="button secondary" type="button">명단 CSV</button></div></article>
+      </div>
+    </section>
+
+    <section id="view-participants" class="view">
+      <div class="section-heading"><div><p class="eyebrow">PARTICIPANTS</p><h2>참가자 관리</h2></div><div class="toolbar"><button id="exportCsvButton" class="button secondary" type="button">CSV 내보내기</button></div></div>
+      <article class="panel">
+        <h3>관리자 직접 등록</h3>
+        <div class="admin-sensitive-note">관리자가 휠체어 이용 또는 장애인 당사자 여부를 직접 입력하는 경우, 온라인 동의 대신 기관의 적절한 동의·확인 절차를 거친 뒤 입력해 주세요.</div>
+        <form id="participantForm" class="form-grid">
+          <label>이름<input name="name" required maxlength="40" placeholder="예: 홍길동" /></label>
+          <label>소속기관<input name="organization" maxlength="80" placeholder="해당사항 없으면 공란" /></label>
+          <label>핸드폰 번호<input name="phone" maxlength="30" placeholder="010-1234-5678" /></label>
+          <label>장애인 당사자<select name="disabledPerson"><option value="false">해당 없음</option><option value="true">장애인 당사자</option></select></label>
+          <label>휠체어<select name="wheelchairUser"><option value="false">미사용</option><option value="true">사용</option></select></label>
+          <label>복지관 서비스<select name="usesCenter"><option value="false">이용하지 않음</option><option value="true">이용함</option></select></label>
+          <label class="wide">좌석번호<input name="seat" maxlength="30" placeholder="비우면 자동배정 / 예: CL-01" /></label>
+          <label class="wide">관리자 메모 <span class="small-text">(내부용)</span><textarea name="note" maxlength="500" rows="3" placeholder="직원 내부 확인이 필요한 내용만 입력"></textarea></label>
+          <div class="form-actions wide"><button class="button primary" type="submit">개인 참가자 등록</button></div>
+        </form>
+      </article>
+      <article class="panel excel-import-panel">
+        <div class="panel-heading"><div><h3>엑셀 참가자명단 가져오기</h3><p class="help-text">.xlsx / .xls / .csv · 권장 열: 이름, 핸드폰번호, 소속기관, 좌석</p></div></div>
+        <div class="excel-import-grid">
+          <input id="excelImportFile" type="file" accept=".xlsx,.xls,.csv" />
+          <button id="excelPreviewButton" class="button secondary" type="button">미리보기</button>
+          <button id="excelImportButton" class="button primary" type="button" disabled>참가자명단에 넣기</button>
+        </div>
+        <p class="small-text">좌석 칸에 <strong>미참여</strong>라고 적으면 명단에는 저장되지만 좌석배치도에는 배정하지 않습니다.</p>
+        <div id="excelImportPreview" class="excel-import-preview"></div>
+      </article>
+      <article class="panel">
+        <div class="filter-row">
+          <input id="participantSearch" type="search" placeholder="이름, 핸드폰 번호, 소속기관, 좌석 검색" />
+          <select id="participantStatusFilter"><option value="all">전체 상태</option><option value="arrived">도착 완료</option><option value="pending">미도착</option></select>
+          <span id="participantCountLabel" class="small-text"></span>
+        </div>
+        <div class="table-wrap"><table><thead><tr><th>번호</th><th>참가자</th><th>연락처</th><th>이용정보</th><th>좌석</th><th>행운추첨</th><th>상태</th><th>관리</th></tr></thead><tbody id="participantTableBody"></tbody></table></div>
+      </article>
+    </section>
+
+    <section id="view-checkin" class="view">
+      <div class="section-heading"><div><p class="eyebrow">CHECK-IN</p><h2>QR 접수</h2></div></div>
+      <div class="two-column checkin-layout">
+        <article class="panel fast-scan-panel">
+          <div class="panel-heading">
+            <div>
+              <h3>고속 QR 스캔 <span id="scannerModeBadge" class="scanner-mode-badge">대기</span></h3>
+              <p class="small-text">후면 카메라를 계속 켜둔 상태에서 QR이 화면에 들어오면 바로 인식합니다.</p>
+            </div>
+            <button id="toggleScannerButton" class="button primary" type="button">카메라 시작</button>
+          </div>
+          <div id="reader" class="scanner-box fast-scanner-box"><p>카메라 시작 버튼을 눌러주세요.</p></div>
+          <div class="fast-scan-status"><span id="scannerStatusDot" class="scanner-status-dot"></span><strong id="scannerStatusText">카메라 대기 중</strong></div>
+          <p class="help-text">지원 기기에서는 네이티브 QR 인식을 우선 사용하고, 미지원 기기는 고속 호환 모드로 자동 전환합니다.</p>
+        </article>
+        <article class="panel"><h3>수동 검색</h3><form id="manualCheckinForm" class="stack-form"><label>이름·연락처·좌석·접수코드<input id="manualCheckinInput" required placeholder="예: 홍길동 또는 BL-01" /></label><button class="button primary" type="submit">찾기</button></form><div id="manualSearchResults" class="search-results"></div></article>
+      </div>
+      <article id="checkinResultPanel" class="panel result-panel hidden"><div id="checkinResult"></div></article>
+    </section>
+
+    <section id="view-seats" class="view">
+      <div class="section-heading"><div><p class="eyebrow">RUNWAY SEATING · 300</p><h2>좌석 배치도</h2><p class="small-text"><strong>A~O 15줄 × (좌 10석 + 우 10석) = 총 300석</strong><br>VIP는 <strong>A~D 각 줄 중앙 6석씩 총 24석</strong>을 금색으로 유지합니다. 장애인(휠체어) 지정석은 <strong>A~C 앞 3줄의 VIP 제외 42석</strong>입니다.</p></div><div class="legend"><span><i class="legend-dot vip"></i>VIP 24석</span><span><i class="legend-dot disabled-priority"></i>장애인(휠체어) 42석</span><span><i class="legend-dot pending"></i>배정완료</span><span><i class="legend-dot arrived"></i>현장도착</span><span><i class="legend-dot empty"></i>빈 좌석</span></div></div>
+      <div class="vip-location-banner"><strong>★ 귀빈(VIP) 지정석 24석</strong><span>A~D · 런웨이 좌우 각 3석</span><small>AL/BL/CL/DL-08~10 · AR/BR/CR/DR-01~03 · 일반 자동배정 제외</small></div>
+      <div class="disabled-priority-banner"><strong>♿ 장애인(휠체어) 지정석 42석</strong><span>A · B · C 앞 3줄</span><small>각 줄 L-01~07 및 R-04~10을 사용합니다. 중앙 VIP 6석은 유지하며 장애인 당사자는 접수 순서대로 AL-01부터 오른쪽 방향으로 선착순 배정됩니다.</small></div>
+
+      <article class="panel seat-operations-panel">
+        <div class="panel-heading"><div><h3>동반좌석 · 기관별 재정렬</h3><p class="help-text">도착한 사람은 움직이지 않고 미도착 참가자만 재배치합니다.</p></div></div>
+        <div class="seat-ops-grid">
+          <section class="seat-op-box">
+            <h4>이름으로 같이 앉기</h4>
+            <div class="inline-form"><input id="companionSearchInput" type="search" placeholder="이름 또는 소속기관 검색" /><button id="companionSearchButton" class="button secondary" type="button">검색</button></div>
+            <div id="companionSearchResults" class="companion-search-results"><div class="empty-state compact">이름이나 기관을 검색하세요.</div></div>
+            <div class="button-row"><button id="linkCompanionButton" class="button primary" type="button">선택한 사람 같이 앉기</button><button id="clearCompanionButton" class="button secondary" type="button">묶기 해제</button></div>
+          </section>
+          <section class="seat-op-box">
+            <h4>기관·동반그룹 기준 좌석 재정렬</h4>
+            <p class="small-text">동반그룹과 같은 소속기관을 최대한 가까운 연속 좌석으로 배치합니다.</p>
+            <button id="reflowOrganizationButton" class="button primary" type="button">좌석 재정렬 하기</button>
+          </section>
+        </div>
+      </article>
+      <article class="panel seat-person-search-panel">
+        <div class="panel-heading"><div><h3>사람을 먼저 찾아 좌석 지정</h3><span class="small-text">개인 참가자를 이름·핸드폰 번호·소속기관으로 바로 검색합니다.</span></div></div>
+        <form id="seatParticipantSearchForm" class="seat-person-search-form">
+          <input id="seatParticipantSearchInput" autocomplete="off" placeholder="이름 / 핸드폰 번호 / 소속기관 검색" />
+          <button class="button primary" type="submit">검색</button>
+        </form>
+        <div id="seatParticipantSearchResults" class="seat-person-search-results"><div class="empty-state compact">검색어를 입력하면 참가자가 표시됩니다.</div></div>
+        <div id="seatSelectedPersonBanner" class="seat-selected-person hidden"></div>
+      </article>
+      <article class="panel seat-zone-editor"><div class="panel-heading"><h3>좌석 구역 일괄 변경</h3><span class="small-text">VIP·장애인(휠체어)·관계자 위치 등을 직접 지정</span></div><form id="seatZoneForm" class="form-grid"><label class="wide">좌석 범위<input id="seatZoneSeats" required placeholder="VIP 예: AL-08~AL-10,AR-01~AR-03,BL-08~BL-10,BR-01~BR-03" /></label><label>구역명<input id="seatZoneCategory" list="seatCategoryPresets" value="VIP" maxlength="40" /><datalist id="seatCategoryPresets"><option value="일반"><option value="VIP"><option value="관계자"><option value="장애인(휠체어)"><option value="휠체어"><option value="장애인지정석"><option value="예비"><option value="추가석"><option value="사용안함"></datalist></label><label>일반 자동배정<select id="seatZoneAuto"><option value="false">제외</option><option value="true">허용</option></select></label><label>좌석 사용<select id="seatZoneEnabled"><option value="true">사용</option><option value="false">사용안함</option></select></label><label>휠체어 자동배정 위치<select id="seatZoneWheelchair"><option value="false">아님</option><option value="true">휠체어 위치로 지정</option></select></label><label class="wide">메모<input id="seatZoneNote" maxlength="120" placeholder="예: 주요 내빈 / 출입구 가까운 휠체어석" /></label><div class="form-actions wide"><button class="button primary" type="submit">구역 설정 저장</button></div></form></article>
+      <article class="auditorium-panel runway-auditorium"><div class="auditorium-entry-marker"><span>입·출입구</span><strong>↙</strong></div><div class="stage-visual runway-stage"><div class="stage-light left"></div><div class="stage-light right"></div><span>MAIN STAGE</span><strong>무대 · 단상</strong><div class="stage-edge"></div></div><div class="runway-head">RUNWAY</div><div id="seatMap" class="runway-seat-map"></div><div id="extraSeatMap" class="hidden"></div></article>
+    </section>
+
+    <section id="view-draw" class="view">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">LUCKY DRAW</p>
+          <h2>행운추첨 당첨 좌석 관리</h2>
+          <p class="small-text">추첨한 좌석번호와 상품명을 등록해 두면 해당 참가자의 QR을 스캔했을 때 당첨 여부가 즉시 표시됩니다.</p>
+        </div>
+        <span id="drawCountLabel" class="small-text"></span>
+      </div>
+      <article class="panel marble-roulette-launch-panel">
+        <div class="marble-roulette-launch-copy">
+          <span class="marble-roulette-badge">MARBLE ROULETTE</span>
+          <h3>도착 참가자 자동 행운권 추첨</h3>
+          <p>현재 <strong>도착 처리된 좌석만</strong> 자동으로 룰렛에 넣습니다. 1~10번 상품을 설정하고 당첨 인원과 1등/꼴찌 방식을 선택해 바로 추첨할 수 있습니다.</p>
+        </div>
+        <a class="button marble-roulette-open-button" href="roulette/" target="_blank" rel="noopener">마블룰렛 추첨 열기 →</a>
+      </article>
+
+      <div class="draw-stat-grid">
+        <article><span>당첨 좌석</span><strong id="drawStatTotal">0</strong></article>
+        <article><span>수령완료</span><strong id="drawStatRedeemed">0</strong></article>
+        <article><span>미수령</span><strong id="drawStatPending">0</strong></article>
+        <article><span>현재 미배정 당첨석</span><strong id="drawStatNoOccupant">0</strong></article>
+      </div>
+
+      <article class="panel lucky-draw-register-panel">
+        <div class="panel-heading"><h3>당첨 좌석·상품 등록</h3><span class="small-text">한 줄에 하나씩 `좌석번호 | 상품명` 형식</span></div>
+        <form id="drawPrizeForm" class="stack-form">
+          <label>당첨 좌석과 상품
+            <textarea id="drawBulkInput" rows="8" required placeholder="예:
+CL-05 | 1등 상품
+ER-10 | 온누리상품권
+JL-03 | 기념품 세트"></textarea>
+          </label>
+          <label>공통 비고 <input id="drawPrizeNote" maxlength="200" placeholder="선택사항" /></label>
+          <button class="button lucky-primary" type="submit">당첨 좌석 등록</button>
+        </form>
+      </article>
+
+      <article class="panel">
+        <div class="filter-row">
+          <input id="drawSearch" type="search" placeholder="좌석번호, 상품명, 당첨자 이름 검색" />
+          <div class="draw-filter-actions"><label><input id="drawPendingOnly" type="checkbox" /> 미수령만 보기</label><button id="drawExportButton" class="button small secondary" type="button">당첨 현황 CSV 저장</button></div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>좌석</th><th>상품</th><th>현재 좌석 참가자</th><th>수령상태</th><th>관리</th></tr></thead>
+            <tbody id="drawPrizeTableBody"></tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+
+    <section id="view-settings" class="view">
+      <div class="section-heading"><div><p class="eyebrow">SETTINGS</p><h2>행사 설정</h2></div></div>
+      <article class="panel">
+        <form id="eventSettingsForm" class="form-grid">
+          <label class="wide">행사명<input id="eventName" required /></label>
+          <label>행사 일시<input id="eventDate" required /></label>
+          <label>장소<input id="eventVenue" required /></label>
+          <label>주최 기관<input id="eventOrganizer" required /></label>
+          <label class="wide"><span>좌석 구조</span><input value="A~O 15줄 × 20석 = 300석" disabled /></label>
+          <label>자동 새로고침(초)<input id="autoRefreshSeconds" type="number" min="5" max="300" /></label>
+          <label class="wide">공개 초대장 부제<input id="publicSubtitle" maxlength="120" /></label>
+          <label class="wide">초대 인사말<input id="publicGreeting" maxlength="5000" /></label>
+          <label class="wide">개인정보 보유기간 안내<input id="privacyRetentionText" maxlength="300" placeholder="예: 행사 종료 후 30일" /></label>
+          <label>온라인 신청 상태<select id="registrationOpen"><option value="true">신청 가능</option><option value="false">신청 마감</option></select></label>
+          <label>최대 수용 인원<input id="registrationCapacity" type="number" min="1" max="300" /></label>
+          <label>좌석 자동 배정<select id="autoAssignSeat"><option value="true">사용</option><option value="false">사용 안 함</option></select></label><label class="wide"><span>인트로 영상 파일</span><input value="PC: assets/intro.mp4 / 모바일: assets/intro_mobile.mp4" disabled /></label><label>티켓 좌석 갱신(초)<input id="ticketRefreshSeconds" type="number" min="5" max="300" /></label><label>접수대 이름<input id="stationName" maxlength="40" placeholder="예: 정문 접수대" /></label>
+          <div class="form-actions wide"><button class="button primary" type="submit">설정 저장</button></div>
+        </form>
+      </article>
+      <article class="panel admin-app-panel">
+        <div class="panel-heading">
+          <div>
+            <h3>관리자 앱으로 사용</h3>
+            <p class="help-text">이 관리자 화면만 휴대폰 또는 PC에 설치형 웹앱(PWA)으로 추가할 수 있습니다. 설치 후 홈 화면 아이콘으로 바로 실행되며 로그인·QR 스캔·좌석관리 기능은 동일합니다.</p>
+          </div>
+        </div>
+        <button class="button primary admin-app-install-trigger" type="button">이 기기에 관리자 앱 설치</button>
+        <p class="small-text admin-app-install-note">아이폰은 Safari의 ‘홈 화면에 추가’ 방식으로 설치됩니다.</p>
+      </article>
+      <article class="panel"><h3>관리자 로그인</h3><p class="help-text">로그인 세션은 24시간 유지됩니다. 아이디·비밀번호 변경은 Apps Script의 Code.gs 맨 위 <code>ADMIN_LOGIN_CONFIG</code>에서 합니다.</p><button id="logoutButton" class="button secondary" type="button">이 기기 로그아웃</button></article>
+    </section>
+  </main>
+
+  <div id="modalBackdrop" class="modal-backdrop hidden"><section id="modal" class="modal" role="dialog" aria-modal="true"><div class="modal-header"><h2 id="modalTitle">상세 정보</h2><button id="closeModalButton" class="icon-button" type="button">×</button></div><div id="modalContent"></div></section></div>
+  <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+  <script src="config.js"></script>
+  <script src="admin.js?v=5.0"></script>
+</body>
+</html>
